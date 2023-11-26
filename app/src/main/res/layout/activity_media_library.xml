@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/o_0dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/white"
+        android:layout_weight="1">
+
+
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/back_ic"
+            android:id="@+id/toolBar"
+            android:layout_marginStart="@dimen/o_12dp"
+            android:layout_marginEnd="@dimen/o_12dp"
+            android:layout_marginTop="@dimen/o_12dp"
+            android:layout_marginBottom="@dimen/o_12dp"
+            tools:ignore="ContentDescription" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/MediaLibrary"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/o_22sp"
+            android:gravity="center"
+            />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/o_0dp"
+        android:layout_weight="13"
+        tools:ignore="UselessLeaf" />
+
+</LinearLayout>
