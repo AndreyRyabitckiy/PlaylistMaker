@@ -14,9 +14,6 @@
         android:background="@color/white"
         android:layout_weight="1">
 
-
-
-
         <ImageView
             android:id="@+id/toolBar"
             android:layout_width="wrap_content"
@@ -28,8 +25,6 @@
             android:layout_marginBottom="@dimen/o_12dp"
             tools:ignore="ContentDescription,InvalidId" />
 
-
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -37,8 +32,8 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="@dimen/o_22sp"
-            android:gravity="center"
-            />
+            android:gravity="center" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -47,7 +42,6 @@
         android:layout_marginTop="24dp"
         android:layout_weight="1"
         android:backgroundTint="@android:color/white">
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -64,7 +58,6 @@
             android:layout_marginEnd="6dp"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-
     </LinearLayout>
 
     <LinearLayout
@@ -73,7 +66,6 @@
         android:layout_weight="1"
         android:backgroundTint="@android:color/white"
         tools:ignore="UseCompoundDrawables">
-
 
         <TextView
             android:layout_width="@dimen/o_0dp"
@@ -93,7 +85,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/share_ic"
             tools:ignore="ContentDescription" />
-
 
     </LinearLayout>
 
@@ -153,7 +144,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/back1_ic"
             tools:ignore="ContentDescription" />
-
 
     </LinearLayout>
 

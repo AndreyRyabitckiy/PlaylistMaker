@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:background="@color/backgroundcolor">
 
-
     <TextView
         android:layout_marginStart="@dimen/o_16dp"
         android:layout_marginTop="14dp"
@@ -18,7 +17,8 @@
         android:textAppearance="@style/title" />
 
     <Button
-        android:id="@+id/buttonPanel1"
+        android:id="@+id/buttonSearch"
+        android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="@dimen/o_0dp"
         android:layout_marginStart="@dimen/o_16dp"
@@ -35,9 +35,9 @@
         app:iconTint="@android:color/black"
         tools:ignore="InvalidId" />
 
-
     <Button
-        android:id="@+id/buttonPanel2"
+        android:id="@+id/buttonMedia"
+        android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="@dimen/o_0dp"
         android:layout_marginStart="@dimen/o_16dp"
@@ -54,9 +54,9 @@
         app:iconTint="@android:color/black"
         tools:ignore="DuplicateIds" />
 
-
     <Button
-        android:id="@+id/buttonPanel3"
+        android:id="@+id/buttonSettings"
+        android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="@dimen/o_0dp"
         android:layout_marginStart="@dimen/o_16dp"
@@ -73,8 +73,5 @@
         app:iconPadding="@dimen/o_8dp"
         app:iconTint="@android:color/black"
         tools:ignore="DuplicateIds" />
-
-
-
 
 </LinearLayout>

@@ -17,8 +17,7 @@ class SettingActivity : AppCompatActivity() {
         val backButton = findViewById<ImageView>(R.id.toolBar)
 
         backButton.setOnClickListener {
-            val displayIntent = Intent(this,MainActivity::class.java)
-            startActivity(displayIntent)
+            finish()
         }
     }
 }
