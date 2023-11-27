@@ -9,10 +9,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/o_0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:background="@color/white"
-        android:layout_weight="1">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/toolBar"
@@ -28,6 +27,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/o_10dp"
+            android:layout_marginBottom="@dimen/o_12dp"
+            android:layout_marginStart="@dimen/o_12dp"
             android:text="@string/settings"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -38,23 +40,26 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/o_0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_weight="1"
         android:backgroundTint="@android:color/white">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/o_0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/_21dp"
+            android:layout_marginBottom="@dimen/_21dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/o_16dp"
             android:gravity="center_vertical"
             android:text="@string/Dark"
             android:textColor="@color/black"
-            android:textSize="@dimen/o_18sp" />
+            android:textSize="@dimen/_16sp" />
 
         <Switch
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginEnd="6dp"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
@@ -62,26 +67,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/o_0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         tools:ignore="UseCompoundDrawables">
 
         <TextView
             android:layout_width="@dimen/o_0dp"
+            android:layout_marginTop="@dimen/_21dp"
+            android:layout_marginBottom="@dimen/_21dp"
             android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/o_16dp"
             android:gravity="center_vertical"
             android:text="@string/share"
             android:textColor="@color/black"
-            android:textSize="@dimen/o_18sp"
+            android:textSize="@dimen/_16sp"
             tools:ignore="InefficientWeight,NestedWeights" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/o_16dp"
+            android:layout_marginEnd="@dimen/o_12dp"
             android:layout_height="wrap_content"
             android:src="@drawable/share_ic"
             tools:ignore="ContentDescription" />
@@ -90,8 +96,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/o_0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         tools:ignore="UseCompoundDrawables">
 
@@ -99,18 +104,20 @@
         <TextView
             android:layout_width="@dimen/o_0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_21dp"
+            android:layout_marginBottom="@dimen/_21dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/o_16dp"
             android:gravity="center_vertical"
             android:text="@string/sourcesend"
             android:textColor="@color/black"
-            android:textSize="@dimen/o_18sp"
+            android:textSize="@dimen/_16sp"
             tools:ignore="InefficientWeight,NestedWeights" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/o_16dp"
+            android:layout_marginEnd="@dimen/o_12dp"
             android:layout_height="wrap_content"
             android:src="@drawable/source_ic"
             tools:ignore="ContentDescription" />
@@ -120,37 +127,34 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/o_0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         tools:ignore="UseCompoundDrawables">
 
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="@dimen/o_0dp"
+            android:layout_marginTop="@dimen/_21dp"
+            android:layout_marginBottom="@dimen/_21dp"
             android:layout_weight="1"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/o_16dp"
             android:gravity="center_vertical"
             android:text="@string/userpolic"
             android:textColor="@color/black"
-            android:textSize="@dimen/r_18sp"
+            android:textSize="@dimen/_16sp"
             tools:ignore="NestedWeights" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/o_16dp"
+            android:layout_marginEnd="@dimen/o_12dp"
             android:layout_height="wrap_content"
             android:src="@drawable/back1_ic"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/o_0dp"
-        android:layout_weight="9"
-        tools:ignore="UselessLeaf" />
+
 
 </LinearLayout>
