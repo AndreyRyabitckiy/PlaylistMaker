@@ -3,122 +3,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/blackorwhite"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:background="@color/white">
+        style="@style/LinearSettings"
+        android:layout_marginStart="4dp">
 
         <ImageView
             android:id="@+id/toolBar"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/back_ic"
-            android:layout_marginStart="@dimen/o_12dp"
-            android:layout_marginEnd="@dimen/o_12dp"
-            android:layout_marginTop="@dimen/o_12dp"
-            android:layout_marginBottom="@dimen/o_12dp"
-            tools:ignore="ContentDescription,InvalidId" />
+            style="@style/BackButton"
+            tools:ignore="ContentDescription,InvalidId,UseAppTint" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/o_10dp"
-            android:layout_marginBottom="@dimen/o_12dp"
-            android:layout_marginStart="@dimen/o_12dp"
-            android:text="@string/settings"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="@dimen/o_22sp"
-            android:gravity="center" />
+            style="@style/TopText"
+            android:text="@string/settings" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@android:color/white">
+        style="@style/LinearSettings"
+        android:layout_marginTop="24dp">
 
         <TextView
-            android:layout_width="@dimen/o_0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/_21dp"
-            android:layout_marginBottom="@dimen/_21dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/o_16dp"
-            android:gravity="center_vertical"
-            android:text="@string/Dark"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_16sp" />
+            style="@style/ButtonSettings"
+            android:text="@string/Dark" />
 
         <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:id="@+id/dayornight"
+            style="@style/ImageSettings"
             android:layout_marginEnd="6dp"
+            android:thumbTint="@color/greyOrBlue"
+            android:trackTint="@color/greyOrBlue1"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/white"
+        style="@style/LinearSettings"
+        android:id="@+id/ShareApp"
         tools:ignore="UseCompoundDrawables">
 
         <TextView
-            android:layout_width="@dimen/o_0dp"
-            android:layout_marginTop="@dimen/_21dp"
-            android:layout_marginBottom="@dimen/_21dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/o_16dp"
-            android:gravity="center_vertical"
+            style="@style/ButtonSettings"
             android:text="@string/share"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_16sp"
             tools:ignore="InefficientWeight,NestedWeights" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/o_12dp"
-            android:layout_height="wrap_content"
+            style="@style/ImageSettings"
             android:src="@drawable/share_ic"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/white"
+        style="@style/LinearSettings"
+        android:id="@+id/SendSuport"
         tools:ignore="UseCompoundDrawables">
 
 
         <TextView
-            android:layout_width="@dimen/o_0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/_21dp"
-            android:layout_marginBottom="@dimen/_21dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/o_16dp"
-            android:gravity="center_vertical"
+            style="@style/ButtonSettings"
             android:text="@string/sourcesend"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_16sp"
             tools:ignore="InefficientWeight,NestedWeights" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/o_12dp"
-            android:layout_height="wrap_content"
+            style="@style/ImageSettings"
             android:src="@drawable/source_ic"
             tools:ignore="ContentDescription" />
 
@@ -126,30 +78,18 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/white"
+        style="@style/LinearSettings"
+        android:id="@+id/UserPolic"
         tools:ignore="UseCompoundDrawables">
 
 
         <TextView
-            android:layout_width="@dimen/o_0dp"
-            android:layout_marginTop="@dimen/_21dp"
-            android:layout_marginBottom="@dimen/_21dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/o_16dp"
-            android:gravity="center_vertical"
-            android:text="@string/userpolic"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_16sp"
-            tools:ignore="NestedWeights" />
+            style="@style/ButtonSettings"
+            android:text="@string/userPolic"
+            tools:ignore="Nestea"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/o_12dp"
-            android:layout_height="wrap_content"
+            style="@style/ImageSettings"
             android:src="@drawable/back1_ic"
             tools:ignore="ContentDescription" />
 
