@@ -16,7 +16,7 @@
             android:name=".MediaLibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".SerarchActivity"
+            android:name=".SearchActivity"
             android:exported="false" />
         <activity
             android:name=".SettingActivity"

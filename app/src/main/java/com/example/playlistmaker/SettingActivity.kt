@@ -38,14 +38,14 @@ class SettingActivity : AppCompatActivity() {
         }
 
         sendButton.setOnClickListener {
-            val supportTeam:Intent = Intent().apply {
+            Intent().apply {
                 action = Intent.ACTION_SENDTO
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email)))
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.emailSubject))
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.emailText))
+                startActivity(this)
             }
-            startActivity(supportTeam)
         }
 
         userPolicButton.setOnClickListener {

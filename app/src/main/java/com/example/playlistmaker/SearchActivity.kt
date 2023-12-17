@@ -2,10 +2,8 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -13,22 +11,22 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 
-class SerarchActivity : AppCompatActivity() {
-    var searchString = ""
+class SearchActivity : AppCompatActivity() {
+    private var searchString = ""
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("SEARCH",searchString)
+        outState.putString(SEARCH,searchString)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        searchString = savedInstanceState.getString("SEARCH").toString()
+        searchString = savedInstanceState.getString(SEARCH).toString()
     }
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_serarch)
+        setContentView(R.layout.activity_search)
 
         val backButton = findViewById<ImageView>(R.id.toolBar)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
@@ -72,5 +70,10 @@ class SerarchActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
+    }
+
+    companion object{
+        const val SEARCH = "SEARCH"
+        const val AMOUNT = ""
     }
 }
