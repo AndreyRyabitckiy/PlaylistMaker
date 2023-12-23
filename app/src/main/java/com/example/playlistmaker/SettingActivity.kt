@@ -3,21 +3,64 @@ package com.example.playlistmaker
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.media.Image
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Switch
+import androidx.appcompat.app.AppCompatDelegate
 
 class SettingActivity : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
 
         val backButton = findViewById<ImageView>(R.id.toolBar)
+        val shareButton = findViewById<LinearLayout>(R.id.ShareApp)
+        val sendButton = findViewById<LinearLayout>(R.id.SendSuport)
+        val userPolicButton = findViewById<LinearLayout>(R.id.UserPolic)
+        val switch = findViewById<Switch>(R.id.dayornight)
 
         backButton.setOnClickListener {
             finish()
+        }
+
+        shareButton.setOnClickListener{
+            val ShareButton:Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.shareHT))
+                setType("text/plain")
+            }
+            startActivity(ShareButton)
+        }
+
+        sendButton.setOnClickListener {
+            Intent().apply {
+                action = Intent.ACTION_SENDTO
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.emailSubject))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.emailText))
+                startActivity(this)
+            }
+        }
+
+        userPolicButton.setOnClickListener {
+            val userPolicOpen:Intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.userPolicWeb)))
+            startActivity(userPolicOpen)
+        }
+
+        switch.setOnClickListener {
+            if (switch.isChecked){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+            }else{
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+            }
         }
     }
 }

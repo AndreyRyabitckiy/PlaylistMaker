@@ -7,8 +7,13 @@
     <string name="searching">Поиск</string>
     <string name="share">Поделится приложением</string>
     <string name="sourcesend">Написать в поддержку</string>
-    <string name="userpolic">Пользовательское соглашение</string>
+    <string name="userPolic">Пользовательское соглашение</string>
     <string name="Dark">Темная тема</string>
-    <string name="searchDisp">Экран поиска</string>
+    <string name="searchDisp">Поиск</string>
     <string name="MediaLibrary">Медиатека</string>
+    <string name="userPolicWeb">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="email">drroon6799@gmail.com</string>
+    <string name="shareHT">https://practicum.yandex.ru/android-developer/?from=catalog</string>
+    <string name="emailText">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="emailSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
 </resources>

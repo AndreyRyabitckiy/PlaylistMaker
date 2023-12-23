@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         val buttonSettings = findViewById<Button>(R.id.buttonSettings)
 
         buttonSearch.setOnClickListener {
-            val displayIntent = Intent(this,SerarchActivity::class.java)
+            val displayIntent = Intent(this,SearchActivity::class.java)
             startActivity(displayIntent)
         }
 

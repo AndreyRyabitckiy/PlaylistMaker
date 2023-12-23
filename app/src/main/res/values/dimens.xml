@@ -10,4 +10,5 @@
     <dimen name="o_8dp">8dp</dimen>
     <dimen name="_21dp">21dp</dimen>
     <dimen name="_16sp">16sp</dimen>
+    <dimen name="o_14dp">14dp</dimen>
 </resources>
