@@ -18,11 +18,11 @@ class SettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
 
-        val backButton = findViewById<ImageView>(R.id.toolBar)
-        val shareButton = findViewById<LinearLayout>(R.id.ShareApp)
-        val sendButton = findViewById<LinearLayout>(R.id.SendSuport)
-        val userPolicButton = findViewById<LinearLayout>(R.id.UserPolic)
-        val switch = findViewById<Switch>(R.id.dayornight)
+        val backButton = findViewById<ImageView>(R.id.ivToolBar)
+        val shareButton = findViewById<LinearLayout>(R.id.llShareApp)
+        val sendButton = findViewById<LinearLayout>(R.id.llSendSuport)
+        val userPolicButton = findViewById<LinearLayout>(R.id.llUserPolic)
+        val switch = findViewById<Switch>(R.id.sDayornight)
 
         backButton.setOnClickListener {
             finish()

@@ -12,7 +12,7 @@
         style="@style/LinearSettings">
 
         <ImageView
-            android:id="@+id/toolBar"
+            android:id="@+id/ivToolBar"
             style="@style/BackButton"
             tools:ignore="ContentDescription,InvalidId" />
 
@@ -27,7 +27,7 @@
     android:orientation="horizontal">
 
     <EditText
-        android:id="@+id/searchText"
+        android:id="@+id/etSearchText"
         android:layout_marginStart="@dimen/o_16dp"
         android:layout_marginTop="@dimen/o_8dp"
         android:layout_marginBottom="@dimen/o_8dp"
@@ -39,8 +39,8 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/_16sp"
         android:hint="@string/searchDisp"
-        android:paddingHorizontal="@dimen/o_14dp"
-        android:paddingVertical="@dimen/o_10dp"
+        android:paddingHorizontal="@dimen/o_16dp"
+        android:paddingVertical="@dimen/o_12dp"
         android:drawablePadding="@dimen/o_8dp"
         android:textColorHint="@color/greyOrBlack"
         android:drawableStart="@drawable/search_icon16"
@@ -50,9 +50,9 @@
 
 
     <ImageView
-        android:id="@+id/clearIcon"
+        android:id="@+id/ivClearIcon"
         android:visibility="gone"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="@dimen/o_20dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"

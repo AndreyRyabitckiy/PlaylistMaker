@@ -17,4 +17,8 @@
     <dimen name="o_1dp">1dp</dimen>
     <dimen name="o_13dp">13dp</dimen>
     <dimen name="o_45dp">45dp</dimen>
+    <dimen name="o_24dp">24dp</dimen>
+    <dimen name="o_4dp">4dp</dimen>
+    <dimen name="o_20dp">20dp</dimen>
+    <dimen name="o_48dp">48dp</dimen>
 </resources>
