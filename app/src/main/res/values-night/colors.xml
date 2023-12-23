@@ -6,6 +6,7 @@
     <color name="blackorblue">#1A1B22</color>
     <color name="blackorwhite">#1A1B22</color>
     <color name="whiteorblack">#FFFFFF</color>
+    <color name = "BlWh">#FFFFFF</color>
     <color name="greyOrWhite">#FFFFFF</color>
     <color name="greyOrWhite1">#FFFFFF</color>
     <color name="greyOrBlue">#3772E7</color>
