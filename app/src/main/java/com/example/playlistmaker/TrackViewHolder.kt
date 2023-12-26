@@ -24,7 +24,7 @@ class TrackViewHolder(itemViev: View):RecyclerView.ViewHolder(itemViev) {
         Glide.with(itemView)
 
             .load(item.artworkUrl100)
-            .placeholder(R.drawable.no_internet_ic)
+            .placeholder(R.drawable.placeholder_ic)
             .centerInside()
             .transform(RoundedCorners(10))
             .into(artworkUrl)
