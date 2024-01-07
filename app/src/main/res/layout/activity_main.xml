@@ -9,7 +9,7 @@
 
     <TextView
         android:layout_marginStart="@dimen/o_16dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="@dimen/o_16dp"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/o_0dp"
@@ -19,15 +19,15 @@
         android:textColor="@color/white"/>
 
     <Button
-        android:id="@+id/buttonSearch"
+        android:id="@+id/bButtonSearch"
         style="@style/ButtonMainMenu"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/o_24dp"
         android:text="@string/searching"
         app:icon="@drawable/search_icon"
         tools:ignore="InvalidId" />
 
     <Button
-        android:id="@+id/buttonMedia"
+        android:id="@+id/bButtonMedia"
         app:icon="@drawable/media"
         android:text="@string/media"
         style="@style/ButtonMainMenu"
@@ -35,7 +35,7 @@
         tools:ignore="DuplicateIds" />
 
     <Button
-        android:id="@+id/buttonSettings"
+        android:id="@+id/bButtonSettings"
         app:icon="@drawable/settings"
         android:text="@string/settings"
         style="@style/ButtonMainMenu"

@@ -10,10 +10,10 @@
 
     <LinearLayout
         style="@style/LinearSettings"
-        android:layout_marginStart="4dp">
+        android:layout_marginStart="@dimen/o_4dp">
 
         <ImageView
-            android:id="@+id/toolBar"
+            android:id="@+id/ivToolBar"
             style="@style/BackButton"
             tools:ignore="ContentDescription,InvalidId,UseAppTint" />
 
@@ -25,16 +25,16 @@
 
     <LinearLayout
         style="@style/LinearSettings"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="@dimen/o_24dp">
 
         <TextView
             style="@style/ButtonSettings"
             android:text="@string/Dark" />
 
         <Switch
-            android:id="@+id/dayornight"
+            android:id="@+id/sDayornight"
             style="@style/ImageSettings"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="@dimen/o_8dp"
             android:thumbTint="@color/greyOrBlue"
             android:trackTint="@color/greyOrBlue1"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -43,7 +43,7 @@
 
     <LinearLayout
         style="@style/LinearSettings"
-        android:id="@+id/ShareApp"
+        android:id="@+id/llShareApp"
         tools:ignore="UseCompoundDrawables">
 
         <TextView
@@ -60,7 +60,7 @@
 
     <LinearLayout
         style="@style/LinearSettings"
-        android:id="@+id/SendSuport"
+        android:id="@+id/llSendSuport"
         tools:ignore="UseCompoundDrawables">
 
 
@@ -79,7 +79,7 @@
 
     <LinearLayout
         style="@style/LinearSettings"
-        android:id="@+id/UserPolic"
+        android:id="@+id/llUserPolic"
         tools:ignore="UseCompoundDrawables">
 
 
