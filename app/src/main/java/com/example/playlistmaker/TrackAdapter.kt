@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
-class TrackAdapter (
-    private val data:ArrayList<Track>
-        ) : RecyclerView.Adapter<TrackViewHolder> () {
+class TrackAdapter(
+    private val data: ArrayList<Track>
+) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun getItemCount(): Int {
         return data.size
@@ -18,7 +18,7 @@ class TrackAdapter (
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
         return TrackViewHolder(view)
     }
 }

@@ -15,6 +15,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -43,13 +45,14 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH,searchString)
+        outState.putString(SEARCH, searchString)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         searchString = savedInstanceState.getString(SEARCH).toString()
     }
+
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +64,10 @@ class SearchActivity : AppCompatActivity() {
         val backButton = findViewById<ImageView>(R.id.ivToolBar)
         val clearButton = findViewById<ImageView>(R.id.ivClearIcon)
         val searchField = findViewById<EditText>(R.id.etSearchText)
-        val holderNothing = findViewById<FrameLayout>(R.id.holderNothing)
-        val holderWrong = findViewById<FrameLayout>(R.id. holdeWrong)
-        val researchButton = findViewById<Button>(R.id.research)
+        val holderNothingOrWrong = findViewById<LinearLayout>(R.id.llHolderNothingOrWrong)
+        val sunOrWiFi = findViewById<ImageView>(R.id.ivSunOrWiFi)
+        val textHolder = findViewById<TextView>(R.id.tvTextHolder)
+        val buttonReserch = findViewById<Button>(R.id.btReserch)
 
         rwTrack.adapter = trackAdapter
 
@@ -89,62 +93,76 @@ class SearchActivity : AppCompatActivity() {
             }
 
         }
-        searchField.addTextChangedListener(simpleTextWatcher)
 
-        clearButton.setOnClickListener {
-            searchField.setText("")
-            val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(searchField.windowToken, 0)
-            tracks.clear()
-            trackAdapter.notifyDataSetChanged()
-
-        }
-
-        researchButton.setOnClickListener {
-
-        }
-
-        searchField.setOnEditorActionListener { view, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE){
-                if(searchField.text.isNotEmpty()){
-                    iTunesService.search(searchField.text.toString()).enqueue(object : Callback<TrackResponse> {
+        fun sendToServer() {
+            if (searchField.text.isNotEmpty()) {
+                iTunesService.search(searchField.text.toString())
+                    .enqueue(object : Callback<TrackResponse> {
                         @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
                             call: Call<TrackResponse>,
-                            response: Response<TrackResponse>) {
-                            holderWrong.isVisible = false
+                            response: Response<TrackResponse>
+                        ) {
                             rwTrack.isVisible = true
-                            holderNothing.isVisible = false
-                            if (response.code() == 200){
+                            holderNothingOrWrong.isVisible = false
+
+                            if (response.code() == 200) {
                                 tracks.clear()
-                                if (response.body()?.results?.isNotEmpty() == true){
+                                if (response.body()?.results?.isNotEmpty() == true) {
                                     tracks.addAll(response.body()?.results!!)
                                     trackAdapter.notifyDataSetChanged()
                                 }
-                                if (tracks.isEmpty()){
-
+                                if (tracks.isEmpty()) {
                                     rwTrack.isVisible = false
-                                    holderNothing.isVisible = true
+                                    holderNothingOrWrong.isVisible = true
+                                    sunOrWiFi.setImageResource(R.drawable.sun_ic)
+                                    textHolder.setText(R.string.nothing)
+                                    buttonReserch.isVisible = false
                                 }
                             } else {
                                 rwTrack.isVisible = false
-                                holderWrong.isVisible = true
-
+                                holderNothingOrWrong.isVisible = true
+                                sunOrWiFi.setImageResource(R.drawable.nointernet_ic)
+                                textHolder.setText(R.string.Wrong)
+                                buttonReserch.isVisible = true
                             }
                         }
 
                         override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
                             rwTrack.isVisible = false
-                            holderWrong.isVisible = true
+                            holderNothingOrWrong.isVisible = true
+                            sunOrWiFi.setImageResource(R.drawable.nointernet_ic)
+                            textHolder.setText(R.string.Wrong)
+                            buttonReserch.isVisible = true
                         }
-                    } )
-                }
+                    })
+            }
+        }
+
+        searchField.addTextChangedListener(simpleTextWatcher)
+
+        clearButton.setOnClickListener {
+            searchField.setText("")
+            val inputMethodManager =
+                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(searchField.windowToken, 0)
+            tracks.clear()
+            trackAdapter.notifyDataSetChanged()
+        }
+
+        buttonReserch.setOnClickListener {
+            sendToServer()
+        }
+
+        searchField.setOnEditorActionListener { view, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                sendToServer()
             }
             false
         }
     }
 
-    companion object{
+    companion object {
         const val SEARCH = "SEARCH"
         const val AMOUNT = ""
     }

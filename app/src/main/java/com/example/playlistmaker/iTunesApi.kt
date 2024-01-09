@@ -6,6 +6,6 @@ import retrofit2.http.Query
 
 interface iTunesApi {
     @GET("/search?entity=song")
-    fun search(@Query("term") text: String):Call<TrackResponse>
+    fun search(@Query("term") text: String): Call<TrackResponse>
 
 }

@@ -12,17 +12,18 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackViewHolder(itemViev: View):RecyclerView.ViewHolder(itemViev) {
+class TrackViewHolder(itemViev: View) : RecyclerView.ViewHolder(itemViev) {
 
     private val artworkUrl: ImageView = itemViev.findViewById(R.id.ivArtworkUrl100)
     private val trackName: TextView = itemViev.findViewById(R.id.tvTrackName)
     private val artistName: TextView = itemViev.findViewById(R.id.tvArtistName)
     private val trackTime: TextView = itemViev.findViewById(R.id.tvTrackTime)
 
-    fun bind (item: Track) {
+    fun bind(item: Track) {
         trackName.text = item.trackName
         artistName.text = item.artistName
-        trackTime.text = item.trackTimeMillis
+        trackTime.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis.toLong())
 
         Glide.with(itemView)
 

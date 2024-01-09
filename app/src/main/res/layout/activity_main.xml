@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/blackorblue">
+    android:background="@color/blackorblue"
+    android:orientation="vertical">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/o_0dp"
         android:layout_marginStart="@dimen/o_16dp"
         android:layout_marginTop="@dimen/o_16dp"
         android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/o_0dp"
         android:fontFamily="@font/ys_display_medium"
         android:text="@string/title"
-        android:textSize="@dimen/o_22sp"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white"
+        android:textSize="@dimen/o_22sp" />
 
     <Button
         android:id="@+id/bButtonSearch"
@@ -28,19 +28,19 @@
 
     <Button
         android:id="@+id/bButtonMedia"
-        app:icon="@drawable/media"
-        android:text="@string/media"
         style="@style/ButtonMainMenu"
         android:layout_marginTop="@dimen/o_16dp"
+        android:text="@string/media"
+        app:icon="@drawable/media"
         tools:ignore="DuplicateIds" />
 
     <Button
         android:id="@+id/bButtonSettings"
-        app:icon="@drawable/settings"
-        android:text="@string/settings"
         style="@style/ButtonMainMenu"
         android:layout_marginTop="@dimen/o_16dp"
         android:layout_marginBottom="28dp"
+        android:text="@string/settings"
+        app:icon="@drawable/settings"
         tools:ignore="DuplicateIds" />
 
 </LinearLayout>

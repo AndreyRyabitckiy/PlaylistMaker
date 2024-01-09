@@ -28,8 +28,8 @@ class SettingActivity : AppCompatActivity() {
             finish()
         }
 
-        shareButton.setOnClickListener{
-            val ShareButton:Intent = Intent().apply {
+        shareButton.setOnClickListener {
+            val ShareButton: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.shareHT))
                 setType("text/plain")
@@ -49,15 +49,16 @@ class SettingActivity : AppCompatActivity() {
         }
 
         userPolicButton.setOnClickListener {
-            val userPolicOpen:Intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.userPolicWeb)))
+            val userPolicOpen: Intent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.userPolicWeb)))
             startActivity(userPolicOpen)
         }
 
         switch.setOnClickListener {
-            if (switch.isChecked){
+            if (switch.isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-            }else{
+            } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
             }

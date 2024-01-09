@@ -11,29 +11,28 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/o_0dp"
         android:layout_marginStart="4dp"
-        android:background="@color/white"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/white">
 
         <ImageView
+            android:id="@+id/toolBar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/back_ic"
-            android:id="@+id/toolBar"
             android:layout_marginStart="@dimen/o_12dp"
-            android:layout_marginEnd="@dimen/o_12dp"
             android:layout_marginTop="@dimen/o_12dp"
+            android:layout_marginEnd="@dimen/o_12dp"
             android:layout_marginBottom="@dimen/o_12dp"
+            android:src="@drawable/back_ic"
             tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:text="@string/MediaLibrary"
-            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="@dimen/o_22sp"
-            android:gravity="center"
-            />
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
