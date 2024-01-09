@@ -21,4 +21,10 @@
     <dimen name="o_4dp">4dp</dimen>
     <dimen name="o_20dp">20dp</dimen>
     <dimen name="o_48dp">48dp</dimen>
+    <dimen name="o_14sp">14sp</dimen>
+    <dimen name="o_19sp">19sp</dimen>
+    <dimen name="o_136dp">136dp</dimen>
+    <dimen name="o_104dp">104dp</dimen>
+    <dimen name="o_26dp">26dp</dimen>
+    <dimen name="o_246dp">246dp</dimen>
 </resources>
