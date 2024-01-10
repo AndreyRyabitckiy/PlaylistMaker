@@ -31,13 +31,13 @@
             style="@style/ButtonSettings"
             android:text="@string/Dark" />
 
-        <Switch
+        <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/sDayornight"
-            style="@style/ImageSettings"
-            android:layout_marginEnd="@dimen/o_8dp"
-            android:thumbTint="@color/greyOrBlue"
-            android:trackTint="@color/greyOrBlue1"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            style="@style/Checker"
+            android:layout_width = "wrap_content"
+            android:layout_gravity = "center_vertical"
+            android:layout_height= "wrap_content"
+            android:layout_marginEnd="@dimen/o_8dp" />
 
     </LinearLayout>
 

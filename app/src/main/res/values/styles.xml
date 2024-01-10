@@ -84,5 +84,10 @@
         <item name="cornerRadius">54dp</item>
     </style>
 
+    <style name="Checker">
+        <item name="thumbTint">@color/greyOrBlue</item>
+        <item name="trackTint">@color/greyOrBlue1</item>
+    </style>
+
 
 </resources>
