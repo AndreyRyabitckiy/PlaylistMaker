@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/blackorwhite"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
@@ -42,8 +42,8 @@
     </LinearLayout>
 
     <LinearLayout
-        style="@style/LinearSettings"
         android:id="@+id/llShareApp"
+        style="@style/LinearSettings"
         tools:ignore="UseCompoundDrawables">
 
         <TextView
@@ -59,8 +59,8 @@
     </LinearLayout>
 
     <LinearLayout
-        style="@style/LinearSettings"
         android:id="@+id/llSendSuport"
+        style="@style/LinearSettings"
         tools:ignore="UseCompoundDrawables">
 
 
@@ -74,25 +74,23 @@
             android:src="@drawable/source_ic"
             tools:ignore="ContentDescription" />
 
-
     </LinearLayout>
 
     <LinearLayout
-        style="@style/LinearSettings"
         android:id="@+id/llUserPolic"
+        style="@style/LinearSettings"
         tools:ignore="UseCompoundDrawables">
 
 
         <TextView
             style="@style/ButtonSettings"
             android:text="@string/userPolic"
-            tools:ignore="Nestea"/>
+            tools:ignore="Nestea" />
 
         <ImageView
             style="@style/ImageSettings"
             android:src="@drawable/back1_ic"
             tools:ignore="ContentDescription" />
-
 
     </LinearLayout>
 

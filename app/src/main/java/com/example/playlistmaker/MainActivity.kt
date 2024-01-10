@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         val buttonSettings = findViewById<Button>(R.id.bButtonSettings)
 
         buttonSearch.setOnClickListener {
-            val displayIntent = Intent(this,SearchActivity::class.java)
+            val displayIntent = Intent(this, SearchActivity::class.java)
             startActivity(displayIntent)
         }
 
