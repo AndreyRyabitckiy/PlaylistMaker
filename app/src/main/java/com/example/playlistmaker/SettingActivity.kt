@@ -29,6 +29,10 @@ class SettingActivity : AppCompatActivity() {
             finish()
         }
 
+        val sharedPrefs = getSharedPreferences(App.THEME_PREFERENCES, MODE_PRIVATE)
+        val themeDayOrNight:Boolean = false
+        switch.isChecked = sharedPrefs.getBoolean(App.DAY_NIGHT,themeDayOrNight)
+
         shareButton.setOnClickListener {
             val ShareButton: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
@@ -54,16 +58,6 @@ class SettingActivity : AppCompatActivity() {
                 Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.userPolicWeb)))
             startActivity(userPolicOpen)
         }
-
-//        switch.setOnClickListener {
-//            if (switch.isChecked) {
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//
-//            } else {
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//
-//            }
-//        }
 
         switch.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)

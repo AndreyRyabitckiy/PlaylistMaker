@@ -60,12 +60,24 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/tvHistorySearch"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginBottom="@dimen/o_20dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:gravity="center_horizontal"
+        android:text="Вы искали"
+        android:textColor="@color/BlWh"
+        android:textSize="@dimen/o_19sp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rwTrack"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/o_0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/o_16dp"
-        android:layout_weight="1"
         android:orientation="vertical"
         android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -135,5 +147,19 @@
             app:tint="@color/BlWh" />
 
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:id="@+id/bClearHistorySearch"
+        style="@style/ButtonSmall"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Очистить историю"
+        android:textAllCaps="false"
+        android:layout_marginTop="@dimen/o_24dp"
+        android:backgroundTint="@color/BlWh"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="@dimen/o_14sp" />
 
 </LinearLayout>

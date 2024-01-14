@@ -2,22 +2,17 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -25,9 +20,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class SearchActivity : AppCompatActivity() {
     private val iTunesBaseUrl = "https://itunes.apple.com"
@@ -42,6 +34,10 @@ class SearchActivity : AppCompatActivity() {
     private var searchString = ""
 
     private val tracks = ArrayList<Track>()
+
+    private val historyTracks = ArrayList<Track>()
+
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -59,6 +55,8 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
 
         val trackAdapter = TrackAdapter(tracks)
+        val historyAdapter = TrackAdapter(historyTracks)
+
 
         val rwTrack = findViewById<RecyclerView>(R.id.rwTrack)
         val backButton = findViewById<ImageView>(R.id.ivToolBar)
@@ -67,14 +65,25 @@ class SearchActivity : AppCompatActivity() {
         val holderNothingOrWrong = findViewById<LinearLayout>(R.id.llHolderNothingOrWrong)
         val sunOrWiFi = findViewById<ImageView>(R.id.ivSunOrWiFi)
         val textHolder = findViewById<TextView>(R.id.tvTextHolder)
-        val buttonReserch = findViewById<Button>(R.id.btReserch)
-
-        rwTrack.adapter = trackAdapter
+        val buttonResearch = findViewById<Button>(R.id.btReserch)
+        val textHistorySearch = findViewById<TextView>(R.id.tvHistorySearch)
+        val buttonClearHistorySearch = findViewById<Button>(R.id.bClearHistorySearch)
 
         searchField.setText(searchString)
+        rwTrack.adapter = trackAdapter
 
         backButton.setOnClickListener {
             finish()
+        }
+
+        searchField.setOnFocusChangeListener { view, hasFocus ->
+            if (searchField.hasFocus() && searchField.text.isEmpty()){
+                textHistorySearch.isVisible = true
+                buttonClearHistorySearch.isVisible = true
+            } else {
+                textHistorySearch.isVisible = false
+                buttonClearHistorySearch.isVisible = false
+            }
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -84,8 +93,17 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
-
                 searchString = searchField.toString()
+
+                if (searchField.hasFocus() && s?.isEmpty() == true){
+                    textHistorySearch.isVisible = true
+                    buttonClearHistorySearch.isVisible = true
+                    holderNothingOrWrong.isVisible = false
+                } else {
+                    textHistorySearch.isVisible = false
+                    buttonClearHistorySearch.isVisible = false
+                    holderNothingOrWrong.isVisible = false
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -117,14 +135,14 @@ class SearchActivity : AppCompatActivity() {
                                     holderNothingOrWrong.isVisible = true
                                     sunOrWiFi.setImageResource(R.drawable.sun_ic)
                                     textHolder.setText(R.string.nothing)
-                                    buttonReserch.isVisible = false
+                                    buttonResearch.isVisible = false
                                 }
                             } else {
                                 rwTrack.isVisible = false
                                 holderNothingOrWrong.isVisible = true
                                 sunOrWiFi.setImageResource(R.drawable.nointernet_ic)
                                 textHolder.setText(R.string.Wrong)
-                                buttonReserch.isVisible = true
+                                buttonResearch.isVisible = true
                             }
                         }
 
@@ -133,7 +151,7 @@ class SearchActivity : AppCompatActivity() {
                             holderNothingOrWrong.isVisible = true
                             sunOrWiFi.setImageResource(R.drawable.nointernet_ic)
                             textHolder.setText(R.string.Wrong)
-                            buttonReserch.isVisible = true
+                            buttonResearch.isVisible = true
                         }
                     })
             }
@@ -150,7 +168,7 @@ class SearchActivity : AppCompatActivity() {
             trackAdapter.notifyDataSetChanged()
         }
 
-        buttonReserch.setOnClickListener {
+        buttonResearch.setOnClickListener {
             sendToServer()
         }
 
