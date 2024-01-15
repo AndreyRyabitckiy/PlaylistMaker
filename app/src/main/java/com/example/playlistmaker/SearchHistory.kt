@@ -5,23 +5,20 @@ import android.content.SharedPreferences
 import android.view.View
 import com.google.gson.Gson
 
-class SearchHistory( sharedPreferences: SharedPreferences) {
+class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
 
 
-    fun read (sharedPreferences: SharedPreferences): Array<Track>{
-        val json = sharedPreferences.getString(HISTORY,null)?:return emptyArray()
-        return Gson().fromJson(json,Array<Track>::class.java)
-
-
+    fun read (): ArrayList<Track>{
+        val json = sharedPreferences.getString(HISTORY,null)?:return ArrayList()
+        return Gson().fromJson(json,ArrayList<Track>()::class.java)
     }
 
-    fun write (sharedPreferences: SharedPreferences,track: Array<Track>){
+    fun write (track: ArrayList<Track>){
         val json = Gson().toJson(track)
         sharedPreferences.edit()
             .putString(HISTORY, json)
             .apply()
-
     }
 
     companion object {

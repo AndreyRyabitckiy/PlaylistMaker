@@ -13,18 +13,21 @@ import java.text.SimpleDateFormat
 import java.util.EventListener
 import java.util.Locale
 
-class TrackViewHolder(itemViev: View) : RecyclerView.ViewHolder(itemViev) {
+class TrackViewHolder(itemViev: View, private val onClick: (Track) -> Unit) : RecyclerView.ViewHolder(itemViev) {
 
     private val artworkUrl: ImageView = itemViev.findViewById(R.id.ivArtworkUrl100)
     private val trackName: TextView = itemViev.findViewById(R.id.tvTrackName)
     private val artistName: TextView = itemViev.findViewById(R.id.tvArtistName)
     private val trackTime: TextView = itemViev.findViewById(R.id.tvTrackTime)
 
+
     fun bind(item: Track) {
+
+        itemView.setOnClickListener { onClick(item) }
+
         trackName.text = item.trackName
         artistName.text = item.artistName
-        trackTime.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis.toLong())
+        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis.toLong())
 
         Glide.with(itemView)
 

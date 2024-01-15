@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -33,12 +34,6 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchString = ""
 
-    private val tracks = ArrayList<Track>()
-
-    private val historyTracks = ArrayList<Track>()
-
-
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH, searchString)
@@ -54,9 +49,17 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val trackAdapter = TrackAdapter(tracks)
-        val historyAdapter = TrackAdapter(historyTracks)
+        val sharedPrefs =getSharedPreferences(SearchHistory.HISTORY, MODE_PRIVATE)
 
+        val tracks = ArrayList<Track>()
+
+        val historyTracks = SearchHistory(sharedPrefs).read()
+
+        val trackAdapter = TrackAdapter(tracks){    }
+        val historyAdapter = TrackAdapter(historyTracks){item ->
+            historyTracks.add(item)
+            SearchHistory(sharedPrefs).write(historyTracks)
+        }
 
         val rwTrack = findViewById<RecyclerView>(R.id.rwTrack)
         val backButton = findViewById<ImageView>(R.id.ivToolBar)
@@ -70,7 +73,7 @@ class SearchActivity : AppCompatActivity() {
         val buttonClearHistorySearch = findViewById<Button>(R.id.bClearHistorySearch)
 
         searchField.setText(searchString)
-        rwTrack.adapter = trackAdapter
+
 
         backButton.setOnClickListener {
             finish()
@@ -96,10 +99,14 @@ class SearchActivity : AppCompatActivity() {
                 searchString = searchField.toString()
 
                 if (searchField.hasFocus() && s?.isEmpty() == true){
+                    rwTrack.adapter = historyAdapter
+                    historyAdapter.notifyDataSetChanged()
                     textHistorySearch.isVisible = true
                     buttonClearHistorySearch.isVisible = true
                     holderNothingOrWrong.isVisible = false
                 } else {
+                    rwTrack.adapter = trackAdapter
+                    trackAdapter.notifyDataSetChanged()
                     textHistorySearch.isVisible = false
                     buttonClearHistorySearch.isVisible = false
                     holderNothingOrWrong.isVisible = false
@@ -179,6 +186,7 @@ class SearchActivity : AppCompatActivity() {
             false
         }
     }
+
 
     companion object {
         const val SEARCH = "SEARCH"
