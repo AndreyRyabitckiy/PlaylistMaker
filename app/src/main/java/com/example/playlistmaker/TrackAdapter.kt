@@ -2,12 +2,13 @@ package com.example.playlistmaker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Adapter
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
 class TrackAdapter(
     private val data: ArrayList<Track>,
-    private val onClick: (Track) -> Unit
+    private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -16,11 +17,12 @@ class TrackAdapter(
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(data[position])
-}
+        holder.itemView.setOnClickListener { onItemClickListener.onItemClick(data[position]) }
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
-        return TrackViewHolder(view, onClick)
+        return TrackViewHolder(view)
     }
 
 }

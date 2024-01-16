@@ -23,6 +23,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
+
     private val iTunesBaseUrl = "https://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
@@ -34,6 +35,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchString = ""
 
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH, searchString)
@@ -44,22 +46,28 @@ class SearchActivity : AppCompatActivity() {
         searchString = savedInstanceState.getString(SEARCH).toString()
     }
 
+
+
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val sharedPrefs =getSharedPreferences(SearchHistory.HISTORY, MODE_PRIVATE)
-
+        val sharedPrefs =getSharedPreferences(SearchHistory.HISTORY_MAIN, MODE_PRIVATE)
+        var historyTracks = SearchHistory(sharedPrefs).read()
         val tracks = ArrayList<Track>()
 
-        val historyTracks = SearchHistory(sharedPrefs).read()
 
-        val trackAdapter = TrackAdapter(tracks){    }
-        val historyAdapter = TrackAdapter(historyTracks){item ->
-            historyTracks.add(item)
-            SearchHistory(sharedPrefs).write(historyTracks)
+        val onItemClickListener = object : OnItemClickListener {
+            override fun onItemClick(item: Track) {
+                historyTracks.add(item)
+                SearchHistory(sharedPrefs).write(historyTracks)
+            }
         }
+
+
+        val trackAdapter = TrackAdapter(tracks, onItemClickListener )
+        val historyAdapter = TrackAdapter(historyTracks,onItemClickListener)
 
         val rwTrack = findViewById<RecyclerView>(R.id.rwTrack)
         val backButton = findViewById<ImageView>(R.id.ivToolBar)
@@ -73,6 +81,7 @@ class SearchActivity : AppCompatActivity() {
         val buttonClearHistorySearch = findViewById<Button>(R.id.bClearHistorySearch)
 
         searchField.setText(searchString)
+
 
 
         backButton.setOnClickListener {
