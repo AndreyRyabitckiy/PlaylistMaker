@@ -82,14 +82,18 @@ class SearchActivity : AppCompatActivity() {
             historyTracks.clear()
             SearchHistory(sharedPrefs).write(historyTracks)
             historyAdapter.notifyDataSetChanged()
+            textHistorySearch.isVisible = false
+            buttonClearHistorySearch.isVisible = false
         }
 
         searchField.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus && searchField.text.isEmpty()) {
                 rwTrack.adapter = historyAdapter
                 historyAdapter.notifyDataSetChanged()
-                textHistorySearch.isVisible = true
-                buttonClearHistorySearch.isVisible = true
+                if(historyTracks.isNotEmpty()) {
+                    textHistorySearch.isVisible = true
+                    buttonClearHistorySearch.isVisible = true
+                }
             } else {
                 textHistorySearch.isVisible = false
                 buttonClearHistorySearch.isVisible = false
@@ -107,8 +111,10 @@ class SearchActivity : AppCompatActivity() {
                 searchString = searchField.toString()
 
                 if (searchField.hasFocus() && s?.isEmpty() == true) {
-                    textHistorySearch.isVisible = true
-                    buttonClearHistorySearch.isVisible = true
+                    if(historyTracks.isNotEmpty()) {
+                        textHistorySearch.isVisible = true
+                        buttonClearHistorySearch.isVisible = true
+                    }
                     holderNothingOrWrong.isVisible = false
                 } else {
                     rwTrack.adapter = trackAdapter
