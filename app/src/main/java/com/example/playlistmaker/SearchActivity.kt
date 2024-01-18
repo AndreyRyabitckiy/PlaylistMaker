@@ -25,16 +25,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
 
     private val iTunesBaseUrl = "https://itunes.apple.com"
-
     private val retrofit = Retrofit.Builder()
         .baseUrl(iTunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
     private val iTunesService = retrofit.create(iTunesApi::class.java)
 
     private var searchString = ""
-
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -46,28 +43,23 @@ class SearchActivity : AppCompatActivity() {
         searchString = savedInstanceState.getString(SEARCH).toString()
     }
 
-
-
     @SuppressLint("MissingInflatedId", "NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val sharedPrefs =getSharedPreferences(SearchHistory.HISTORY_MAIN, MODE_PRIVATE)
+        val sharedPrefs = getSharedPreferences(SearchHistory.HISTORY_MAIN, MODE_PRIVATE)
         var historyTracks = SearchHistory(sharedPrefs).read()
         val tracks = ArrayList<Track>()
 
-
         val onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(item: Track) {
-                historyTracks.add(item)
-                SearchHistory(sharedPrefs).write(historyTracks)
+                historyTracks = SearchHistory(sharedPrefs).write(historyTracks, item)
             }
         }
 
-
-        val trackAdapter = TrackAdapter(tracks, onItemClickListener )
-        val historyAdapter = TrackAdapter(historyTracks,onItemClickListener)
+        val trackAdapter = TrackAdapter(tracks, onItemClickListener)
+        val historyAdapter = TrackAdapter(historyTracks)
 
         val rwTrack = findViewById<RecyclerView>(R.id.rwTrack)
         val backButton = findViewById<ImageView>(R.id.ivToolBar)
@@ -82,14 +74,20 @@ class SearchActivity : AppCompatActivity() {
 
         searchField.setText(searchString)
 
-
-
         backButton.setOnClickListener {
             finish()
         }
 
+        buttonClearHistorySearch.setOnClickListener {
+            historyTracks.clear()
+            SearchHistory(sharedPrefs).write(historyTracks)
+            historyAdapter.notifyDataSetChanged()
+        }
+
         searchField.setOnFocusChangeListener { view, hasFocus ->
-            if (searchField.hasFocus() && searchField.text.isEmpty()){
+            if (hasFocus && searchField.text.isEmpty()) {
+                rwTrack.adapter = historyAdapter
+                historyAdapter.notifyDataSetChanged()
                 textHistorySearch.isVisible = true
                 buttonClearHistorySearch.isVisible = true
             } else {
@@ -100,16 +98,15 @@ class SearchActivity : AppCompatActivity() {
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
+                rwTrack.adapter = historyAdapter
+                historyAdapter.notifyDataSetChanged()
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
                 searchString = searchField.toString()
 
-                if (searchField.hasFocus() && s?.isEmpty() == true){
-                    rwTrack.adapter = historyAdapter
-                    historyAdapter.notifyDataSetChanged()
+                if (searchField.hasFocus() && s?.isEmpty() == true) {
                     textHistorySearch.isVisible = true
                     buttonClearHistorySearch.isVisible = true
                     holderNothingOrWrong.isVisible = false
@@ -140,9 +137,10 @@ class SearchActivity : AppCompatActivity() {
                             rwTrack.isVisible = true
                             holderNothingOrWrong.isVisible = false
 
-                            if (response.code() == 200) {
+                            if (response.isSuccessful) {
                                 tracks.clear()
-                                if (response.body()?.results?.isNotEmpty() == true) {
+                                val answer = response.body()?.results
+                                if (answer?.isNotEmpty() == true) {
                                     tracks.addAll(response.body()?.results!!)
                                     trackAdapter.notifyDataSetChanged()
                                 }
@@ -202,5 +200,3 @@ class SearchActivity : AppCompatActivity() {
         const val AMOUNT = ""
     }
 }
-
-
