@@ -28,4 +28,11 @@
     <dimen name="o_26dp">26dp</dimen>
     <dimen name="o_246dp">246dp</dimen>
     <dimen name="o_44dp">44dp</dimen>
+    <dimen name="o_40dp">40dp</dimen>
+    <dimen name="o_32dp">32dp</dimen>
+    <dimen name="o_50dp">50dp</dimen>
+    <dimen name="o_84dp">84dp</dimen>
+    <dimen name="o_52dp">52dp</dimen>
+    <dimen name="o_28dp">28dp</dimen>
+    <dimen name="o_13sp">13sp</dimen>
 </resources>
