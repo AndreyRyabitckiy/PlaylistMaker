@@ -78,6 +78,8 @@
     </style>
 
     <style name="playerTextAnswer">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textColor">@color/whiteOrBlack</item>
         <item name="android:textSize">@dimen/o_13sp</item>
