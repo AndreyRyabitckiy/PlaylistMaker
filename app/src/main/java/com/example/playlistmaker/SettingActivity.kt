@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId", "UseSwitchCompatOrMaterialCode")
@@ -22,11 +23,15 @@ class SettingActivity : AppCompatActivity() {
         val shareButton = findViewById<LinearLayout>(R.id.llShareApp)
         val sendButton = findViewById<LinearLayout>(R.id.llSendSuport)
         val userPolicButton = findViewById<LinearLayout>(R.id.llUserPolic)
-        val switch = findViewById<Switch>(R.id.sDayornight)
+        val switch = findViewById<SwitchMaterial>(R.id.sDayornight)
 
         backButton.setOnClickListener {
             finish()
         }
+
+        val sharedPrefs = getSharedPreferences(App.THEME_PREFERENCES, MODE_PRIVATE)
+        val themeDayOrNight:Boolean = false
+        switch.isChecked = sharedPrefs.getBoolean(App.DAY_NIGHT,themeDayOrNight)
 
         shareButton.setOnClickListener {
             val ShareButton: Intent = Intent().apply {
@@ -54,14 +59,8 @@ class SettingActivity : AppCompatActivity() {
             startActivity(userPolicOpen)
         }
 
-        switch.setOnClickListener {
-            if (switch.isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-            }
+        switch.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
     }
 }

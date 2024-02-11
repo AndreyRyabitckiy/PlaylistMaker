@@ -21,4 +21,6 @@
     <string name="restore">Обновить</string>
     <string name="Wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
     <string name="nothing">Ничего не нашлось</string>
+    <string name="clear_history">Очистить историю</string>
+    <string name="your_search">Вы искали</string>
 </resources>
