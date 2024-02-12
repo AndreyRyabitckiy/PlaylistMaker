@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/blackOrWhite"
     android:orientation="vertical"
-    tools:context=".MusicPlayer">
+    tools:context=".MusicPlayerActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"
@@ -108,7 +108,7 @@
         android:layout_marginBottom="@dimen/o_20dp"
         android:backgroundTint="@color/grey"
         app:cornerRadius="@dimen/o_26dp"
-        app:icon="@drawable/add_library_ic"
+        app:icon="@drawable/ic_add_library"
         app:iconTint="@color/white"
         app:layout_constraintBaseline_toBaselineOf="@id/playMusicB"
         app:layout_constraintBottom_toTopOf="@id/timeMusic30Tv"

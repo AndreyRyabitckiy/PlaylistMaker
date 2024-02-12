@@ -12,7 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MusicPlayer : AppCompatActivity() {
+class MusicPlayerActivity : AppCompatActivity() {
 
     private val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
 
@@ -55,7 +55,7 @@ class MusicPlayer : AppCompatActivity() {
                 .load(urlImage)
                 .placeholder(R.drawable.placeholder_ic)
                 .centerInside()
-                .transform(RoundedCorners(10))
+                .transform(RoundedCorners(radiusCutImage))
                 .into(musicImage)
         }
     }
@@ -67,7 +67,7 @@ class MusicPlayer : AppCompatActivity() {
         val dfOut = SimpleDateFormat("yyyy", Locale.getDefault())
 
         dfIn.parse(inputDate)?.let { date ->
-            return dfOut.format(date) ?: ""
+            return dfOut.format(date).orEmpty() ?: ""
         } ?: return ""
     }
 

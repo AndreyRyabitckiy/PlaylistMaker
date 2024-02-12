@@ -3,7 +3,6 @@ package com.example.playlistmaker
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -65,8 +64,8 @@ class SearchActivity : AppCompatActivity() {
 
         adapter.onClick = { item ->
             searchHistory.write(item)
-            val playerIntent = Intent(this@SearchActivity, MusicPlayer::class.java)
-            playerIntent.putExtra(MusicPlayer.TRACK_KEY, item)
+            val playerIntent = Intent(this@SearchActivity, MusicPlayerActivity::class.java)
+            playerIntent.putExtra(MusicPlayerActivity.TRACK_KEY, item)
             startActivity(playerIntent)
         }
 
