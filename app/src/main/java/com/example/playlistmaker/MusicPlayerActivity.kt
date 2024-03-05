@@ -19,17 +19,6 @@ import java.util.Locale
 
 class MusicPlayerActivity : AppCompatActivity() {
 
-    companion object {
-        const val TRACK_KEY = "TRACK"
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val DELAY = 300L
-        private const val MUSIC_TIME = 29900
-        private const val TIME_START = "00:00"
-    }
-
     private val mainThreadHandler by lazy { Handler(Looper.getMainLooper()) }
 
     private val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
@@ -80,7 +69,7 @@ class MusicPlayerActivity : AppCompatActivity() {
                 .load(urlImage)
                 .placeholder(R.drawable.placeholder_ic)
                 .centerInside()
-                .transform(RoundedCorners(radiusCutImage))
+                .transform(RoundedCorners(RADIUS_CUT_IMAGE))
                 .into(musicImage)
         }
 
@@ -174,6 +163,18 @@ class MusicPlayerActivity : AppCompatActivity() {
         playButton.setIconResource(R.drawable.ic_play)
         playerState = STATE_PAUSED
     }
+
+    companion object {
+        const val TRACK_KEY = "TRACK"
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val DELAY = 300L
+        private const val MUSIC_TIME = 29900
+        private const val TIME_START = "00:00"
+    }
+
 }
 
 

@@ -32,7 +32,7 @@ class TrackViewHolder(itemViev: View) : RecyclerView.ViewHolder(itemViev) {
             .load(item.artworkUrl100)
             .placeholder(R.drawable.placeholder_ic)
             .centerInside()
-            .transform(RoundedCorners(radiusCutImage))
+            .transform(RoundedCorners(RADIUS_CUT_IMAGE))
             .into(artworkUrl)
     }
 }
