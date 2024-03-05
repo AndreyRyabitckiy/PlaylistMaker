@@ -2,7 +2,7 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.SharedPreferences
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -33,6 +33,17 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchString = ""
 
+    private var showHistory = false
+
+    val adapter by lazy { TrackAdapter() }
+
+    val searchHistory by lazy {
+        val sharedPrefs = getSharedPreferences(SearchHistory.HISTORY_MAIN, MODE_PRIVATE)
+        SearchHistory(sharedPrefs)
+    }
+    val historyTracks: ArrayList<Track>
+        get() = searchHistory.read()
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH, searchString)
@@ -48,20 +59,18 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val sharedPrefs = getSharedPreferences(SearchHistory.HISTORY_MAIN, MODE_PRIVATE)
-        var historyTracks = SearchHistory(sharedPrefs).read()
+
         val tracks = ArrayList<Track>()
 
-        val onItemClickListener = object : OnItemClickListener {
-            override fun onItemClick(item: Track) {
-                historyTracks = SearchHistory(sharedPrefs).write(historyTracks, item)
-            }
+        adapter.onClick = { item ->
+            searchHistory.write(item)
+            val playerIntent = Intent(this@SearchActivity, MusicPlayerActivity::class.java)
+            playerIntent.putExtra(MusicPlayerActivity.TRACK_KEY, item)
+            startActivity(playerIntent)
         }
 
-        val trackAdapter = TrackAdapter(tracks, onItemClickListener)
-        val historyAdapter = TrackAdapter(historyTracks)
-
         val rwTrack = findViewById<RecyclerView>(R.id.rwTrack)
+        rwTrack.adapter = adapter
         val backButton = findViewById<ImageView>(R.id.ivToolBar)
         val clearButton = findViewById<ImageView>(R.id.ivClearIcon)
         val searchField = findViewById<EditText>(R.id.etSearchText)
@@ -79,18 +88,17 @@ class SearchActivity : AppCompatActivity() {
         }
 
         buttonClearHistorySearch.setOnClickListener {
-            historyTracks.clear()
-            SearchHistory(sharedPrefs).write(historyTracks)
-            historyAdapter.notifyDataSetChanged()
+            adapter.data.clear()
+            searchHistory.clearHistory()
             textHistorySearch.isVisible = false
             buttonClearHistorySearch.isVisible = false
         }
 
         searchField.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus && searchField.text.isEmpty()) {
-                rwTrack.adapter = historyAdapter
-                historyAdapter.notifyDataSetChanged()
-                if(historyTracks.isNotEmpty()) {
+                showHistory = true
+                adapter.data = historyTracks
+                if (historyTracks.isNotEmpty()) {
                     textHistorySearch.isVisible = true
                     buttonClearHistorySearch.isVisible = true
                 }
@@ -102,8 +110,8 @@ class SearchActivity : AppCompatActivity() {
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                rwTrack.adapter = historyAdapter
-                historyAdapter.notifyDataSetChanged()
+                showHistory = true
+                adapter.data = historyTracks
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -111,14 +119,14 @@ class SearchActivity : AppCompatActivity() {
                 searchString = searchField.toString()
 
                 if (searchField.hasFocus() && s?.isEmpty() == true) {
-                    if(historyTracks.isNotEmpty()) {
+                    if (historyTracks.isNotEmpty()) {
                         textHistorySearch.isVisible = true
                         buttonClearHistorySearch.isVisible = true
                     }
                     holderNothingOrWrong.isVisible = false
                 } else {
-                    rwTrack.adapter = trackAdapter
-                    trackAdapter.notifyDataSetChanged()
+                    showHistory = false
+                    adapter.data = tracks
                     textHistorySearch.isVisible = false
                     buttonClearHistorySearch.isVisible = false
                     holderNothingOrWrong.isVisible = false
@@ -128,7 +136,6 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 // empty
             }
-
         }
 
         fun sendToServer() {
@@ -148,7 +155,8 @@ class SearchActivity : AppCompatActivity() {
                                 val answer = response.body()?.results
                                 if (answer?.isNotEmpty() == true) {
                                     tracks.addAll(response.body()?.results!!)
-                                    trackAdapter.notifyDataSetChanged()
+                                    showHistory = false
+                                    adapter.data = tracks
                                 }
                                 if (tracks.isEmpty()) {
                                     rwTrack.isVisible = false
@@ -185,7 +193,8 @@ class SearchActivity : AppCompatActivity() {
                 getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(searchField.windowToken, 0)
             tracks.clear()
-            trackAdapter.notifyDataSetChanged()
+            showHistory = true
+            adapter.data = historyTracks
         }
 
         buttonResearch.setOnClickListener {
@@ -200,6 +209,12 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (showHistory) {
+            adapter.data = historyTracks
+        }
+    }
 
     companion object {
         const val SEARCH = "SEARCH"

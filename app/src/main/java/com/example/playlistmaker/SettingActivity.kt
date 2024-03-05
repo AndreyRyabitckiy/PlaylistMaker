@@ -30,8 +30,8 @@ class SettingActivity : AppCompatActivity() {
         }
 
         val sharedPrefs = getSharedPreferences(App.THEME_PREFERENCES, MODE_PRIVATE)
-        val themeDayOrNight:Boolean = false
-        switch.isChecked = sharedPrefs.getBoolean(App.DAY_NIGHT,themeDayOrNight)
+        val themeDayOrNight: Boolean = false
+        switch.isChecked = sharedPrefs.getBoolean(App.DAY_NIGHT, themeDayOrNight)
 
         shareButton.setOnClickListener {
             val ShareButton: Intent = Intent().apply {
