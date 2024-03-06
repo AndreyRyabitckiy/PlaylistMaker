@@ -22,7 +22,7 @@ class MusicPlayerActivity : AppCompatActivity() {
     private val mainThreadHandler by lazy { Handler(Looper.getMainLooper()) }
 
     private val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
-    private var playerState = STATE_DEFAULT
+    private var playerState = PlayerState.DEFAULT
     private var mediaPlayer = MediaPlayer()
     private var url: String? = " "
     private lateinit var playButton: MaterialButton
@@ -69,7 +69,7 @@ class MusicPlayerActivity : AppCompatActivity() {
                 .load(urlImage)
                 .placeholder(R.drawable.placeholder_ic)
                 .centerInside()
-                .transform(RoundedCorners(RADIUS_CUT_IMAGE))
+                .transform(RoundedCorners(dpToPx(RADIUS_CUT_IMAGE,this)))
                 .into(musicImage)
         }
 
@@ -81,7 +81,7 @@ class MusicPlayerActivity : AppCompatActivity() {
     }
 
     private fun startTimerMusic() {
-        if (playerState == STATE_PREPARED || playerState == STATE_PAUSED)
+        if (playerState == PlayerState.PREPARED || playerState == PlayerState.PAUSED)
             mainThreadHandler?.post(
                 createUpdateTimerMusicTask()
             ) else {
@@ -95,10 +95,10 @@ class MusicPlayerActivity : AppCompatActivity() {
                 val timeMusicAnswer = mediaPlayer.currentPosition
                 if (timeMusicAnswer < MUSIC_TIME) {
                     timeMusic30.text = dateFormat.format(timeMusicAnswer.toLong()).toString()
-                    mainThreadHandler?.postDelayed(this, DELAY)
+                    mainThreadHandler.postDelayed(this, DELAY)
                 } else {
                     timeMusic30.text = TIME_START
-                    mainThreadHandler?.postDelayed(this, DELAY)
+                    mainThreadHandler.postDelayed(this, DELAY)
                 }
             }
         }
@@ -131,48 +131,53 @@ class MusicPlayerActivity : AppCompatActivity() {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
+            playerState = PlayerState.PREPARED
         }
 
         mediaPlayer.setOnCompletionListener {
             playButton.setIconResource(R.drawable.ic_play)
-            playerState = STATE_PREPARED
+            playerState = PlayerState.PREPARED
         }
     }
 
     private fun playbackControl() {
         when (playerState) {
-            STATE_PLAYING -> {
+            PlayerState.PLAYING -> {
                 pausePlayer()
             }
 
-            STATE_PREPARED, STATE_PAUSED -> {
+            PlayerState.PREPARED, PlayerState.PAUSED -> {
                 startPlayer()
             }
+
+            else -> Unit
         }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
         playButton.setIconResource(R.drawable.pause_ic)
-        playerState = STATE_PLAYING
+        playerState = PlayerState.PLAYING
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
         playButton.setIconResource(R.drawable.ic_play)
-        playerState = STATE_PAUSED
+        playerState = PlayerState.PAUSED
     }
 
     companion object {
         const val TRACK_KEY = "TRACK"
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
         private const val DELAY = 300L
         private const val MUSIC_TIME = 29900
         private const val TIME_START = "00:00"
+    }
+
+    enum class PlayerState {
+        DEFAULT,
+        PREPARED,
+        PLAYING,
+        PAUSED
     }
 
 }

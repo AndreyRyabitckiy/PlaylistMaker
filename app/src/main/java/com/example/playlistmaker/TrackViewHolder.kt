@@ -1,5 +1,7 @@
 package com.example.playlistmaker
 
+import android.content.Context
+import android.util.TypedValue
 import android.view.RoundedCorner
 import android.view.View
 import android.widget.GridView
@@ -21,7 +23,6 @@ class TrackViewHolder(itemViev: View) : RecyclerView.ViewHolder(itemViev) {
     private val trackTime: TextView = itemViev.findViewById(R.id.tvTrackTime)
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
-
     fun bind(item: Track) {
 
         trackName.text = item.trackName
@@ -32,7 +33,7 @@ class TrackViewHolder(itemViev: View) : RecyclerView.ViewHolder(itemViev) {
             .load(item.artworkUrl100)
             .placeholder(R.drawable.placeholder_ic)
             .centerInside()
-            .transform(RoundedCorners(RADIUS_CUT_IMAGE))
+            .transform(RoundedCorners(dpToPx(RADIUS_CUT_IMAGE, itemView.context)))
             .into(artworkUrl)
     }
 }
