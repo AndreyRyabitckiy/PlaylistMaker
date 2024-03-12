@@ -1,20 +1,32 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class MusicPlayerActivity : AppCompatActivity() {
 
+    private val mainThreadHandler by lazy { Handler(Looper.getMainLooper()) }
+
     private val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
+    private var playerState = PlayerState.DEFAULT
+    private var mediaPlayer = MediaPlayer()
+    private var url: String? = " "
+    private lateinit var playButton: MaterialButton
+    private val timeMusic30 by lazy { findViewById<TextView>(R.id.timeMusic30Tv) }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +44,14 @@ class MusicPlayerActivity : AppCompatActivity() {
         val country = findViewById<TextView>(R.id.countryAnswerTv)
         val textGroup = findViewById<Group>(R.id.textGroup)
 
+        playButton = findViewById(R.id.playMusicB)
+
         backButton.setOnClickListener {
             finish()
         }
 
         intent.parcelable<Track>(TRACK_KEY)?.let { track ->
-
+            url = track.previewUrl
             nameMusic.text = track.trackName
             groupName.text = track.artistName
             timeMusic.text = dateFormat.format(track.trackTimeMillis.toLong())
@@ -55,9 +69,50 @@ class MusicPlayerActivity : AppCompatActivity() {
                 .load(urlImage)
                 .placeholder(R.drawable.placeholder_ic)
                 .centerInside()
-                .transform(RoundedCorners(radiusCutImage))
+                .transform(RoundedCorners(dpToPx(RADIUS_CUT_IMAGE,this)))
                 .into(musicImage)
         }
+
+        preparePlayer()
+        playButton.setOnClickListener {
+            startTimerMusic()
+            playbackControl()
+        }
+    }
+
+    private fun startTimerMusic() {
+        if (playerState == PlayerState.PREPARED || playerState == PlayerState.PAUSED)
+            mainThreadHandler?.post(
+                createUpdateTimerMusicTask()
+            ) else {
+            mainThreadHandler.removeCallbacksAndMessages(null)
+        }
+    }
+
+    private fun createUpdateTimerMusicTask(): Runnable {
+        return object : Runnable {
+            override fun run() {
+                val timeMusicAnswer = mediaPlayer.currentPosition
+                if (timeMusicAnswer < MUSIC_TIME) {
+                    timeMusic30.text = dateFormat.format(timeMusicAnswer.toLong()).toString()
+                    mainThreadHandler.postDelayed(this, DELAY)
+                } else {
+                    timeMusic30.text = TIME_START
+                    mainThreadHandler.postDelayed(this, DELAY)
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        mediaPlayer.release()
+        mainThreadHandler.removeCallbacksAndMessages(null)
+        super.onDestroy()
     }
 
     private fun getFormattedDate(inputDate: String?): String {
@@ -71,9 +126,60 @@ class MusicPlayerActivity : AppCompatActivity() {
         } ?: return ""
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun preparePlayer() {
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playerState = PlayerState.PREPARED
+        }
+
+        mediaPlayer.setOnCompletionListener {
+            playButton.setIconResource(R.drawable.ic_play)
+            playerState = PlayerState.PREPARED
+        }
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            PlayerState.PLAYING -> {
+                pausePlayer()
+            }
+
+            PlayerState.PREPARED, PlayerState.PAUSED -> {
+                startPlayer()
+            }
+
+            else -> Unit
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        playButton.setIconResource(R.drawable.pause_ic)
+        playerState = PlayerState.PLAYING
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playButton.setIconResource(R.drawable.ic_play)
+        playerState = PlayerState.PAUSED
+    }
+
     companion object {
         const val TRACK_KEY = "TRACK"
+        private const val DELAY = 300L
+        private const val MUSIC_TIME = 29900
+        private const val TIME_START = "00:00"
     }
+
+    enum class PlayerState {
+        DEFAULT,
+        PREPARED,
+        PLAYING,
+        PAUSED
+    }
+
 }
 
 

@@ -5,6 +5,7 @@
     android:id="@+id/rootTrackLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
     android:gravity="center_horizontal"
     android:orientation="horizontal">
 

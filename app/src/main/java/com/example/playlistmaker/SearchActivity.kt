@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
@@ -13,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -31,9 +34,23 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val iTunesService = retrofit.create(iTunesApi::class.java)
 
+    private val searchRunnable = Runnable { sendToServer() }
+
     private var searchString = ""
 
+    private val searchField by lazy { findViewById<EditText>(R.id.etSearchText) }
+    private val rwTrack by lazy { findViewById<RecyclerView>(R.id.rwTrack) }
+    private val holderNothingOrWrong by lazy { findViewById<LinearLayout>(R.id.llHolderNothingOrWrong) }
+    private val buttonResearch by lazy { findViewById<Button>(R.id.btReserch) }
+    private val progressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
+    private val sunOrWiFi by lazy { findViewById<ImageView>(R.id.ivSunOrWiFi) }
+    private val textHolder by lazy { findViewById<TextView>(R.id.tvTextHolder) }
+
     private var showHistory = false
+
+    private var isClickAllowed = true
+
+    private val handler = Handler(Looper.getMainLooper())
 
     val adapter by lazy { TrackAdapter() }
 
@@ -43,6 +60,8 @@ class SearchActivity : AppCompatActivity() {
     }
     val historyTracks: ArrayList<Track>
         get() = searchHistory.read()
+
+    val tracks = ArrayList<Track>()
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -59,25 +78,28 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-
-        val tracks = ArrayList<Track>()
-
-        adapter.onClick = { item ->
-            searchHistory.write(item)
-            val playerIntent = Intent(this@SearchActivity, MusicPlayerActivity::class.java)
-            playerIntent.putExtra(MusicPlayerActivity.TRACK_KEY, item)
-            startActivity(playerIntent)
+        fun clickDebounce(): Boolean {
+            val current = isClickAllowed
+            if (isClickAllowed) {
+                isClickAllowed = false
+                handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            }
+            return current
         }
 
-        val rwTrack = findViewById<RecyclerView>(R.id.rwTrack)
+
+        adapter.onClick = { item ->
+            if (clickDebounce()) {
+                searchHistory.write(item)
+                val playerIntent = Intent(this@SearchActivity, MusicPlayerActivity::class.java)
+                playerIntent.putExtra(MusicPlayerActivity.TRACK_KEY, item)
+                startActivity(playerIntent)
+            }
+        }
+
         rwTrack.adapter = adapter
         val backButton = findViewById<ImageView>(R.id.ivToolBar)
         val clearButton = findViewById<ImageView>(R.id.ivClearIcon)
-        val searchField = findViewById<EditText>(R.id.etSearchText)
-        val holderNothingOrWrong = findViewById<LinearLayout>(R.id.llHolderNothingOrWrong)
-        val sunOrWiFi = findViewById<ImageView>(R.id.ivSunOrWiFi)
-        val textHolder = findViewById<TextView>(R.id.tvTextHolder)
-        val buttonResearch = findViewById<Button>(R.id.btReserch)
         val textHistorySearch = findViewById<TextView>(R.id.tvHistorySearch)
         val buttonClearHistorySearch = findViewById<Button>(R.id.bClearHistorySearch)
 
@@ -115,6 +137,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchDebounce()
                 clearButton.isVisible = !s.isNullOrEmpty()
                 searchString = searchField.toString()
 
@@ -135,53 +158,6 @@ class SearchActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 // empty
-            }
-        }
-
-        fun sendToServer() {
-            if (searchField.text.isNotEmpty()) {
-                iTunesService.search(searchField.text.toString())
-                    .enqueue(object : Callback<TrackResponse> {
-                        @SuppressLint("NotifyDataSetChanged")
-                        override fun onResponse(
-                            call: Call<TrackResponse>,
-                            response: Response<TrackResponse>
-                        ) {
-                            rwTrack.isVisible = true
-                            holderNothingOrWrong.isVisible = false
-
-                            if (response.isSuccessful) {
-                                tracks.clear()
-                                val answer = response.body()?.results
-                                if (answer?.isNotEmpty() == true) {
-                                    tracks.addAll(response.body()?.results!!)
-                                    showHistory = false
-                                    adapter.data = tracks
-                                }
-                                if (tracks.isEmpty()) {
-                                    rwTrack.isVisible = false
-                                    holderNothingOrWrong.isVisible = true
-                                    sunOrWiFi.setImageResource(R.drawable.sun_ic)
-                                    textHolder.setText(R.string.nothing)
-                                    buttonResearch.isVisible = false
-                                }
-                            } else {
-                                rwTrack.isVisible = false
-                                holderNothingOrWrong.isVisible = true
-                                sunOrWiFi.setImageResource(R.drawable.nointernet_ic)
-                                textHolder.setText(R.string.Wrong)
-                                buttonResearch.isVisible = true
-                            }
-                        }
-
-                        override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                            rwTrack.isVisible = false
-                            holderNothingOrWrong.isVisible = true
-                            sunOrWiFi.setImageResource(R.drawable.nointernet_ic)
-                            textHolder.setText(R.string.Wrong)
-                            buttonResearch.isVisible = true
-                        }
-                    })
             }
         }
 
@@ -209,6 +185,67 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    fun sendToServer() {
+        if (searchField.text.isNotEmpty()) {
+            rwTrack.isVisible = false
+            holderNothingOrWrong.isVisible = false
+            buttonResearch.isVisible = false
+            progressBar.isVisible = true
+
+            iTunesService.search(searchField.text.toString())
+                .enqueue(object : Callback<TrackResponse> {
+                    @SuppressLint("NotifyDataSetChanged")
+                    override fun onResponse(
+                        call: Call<TrackResponse>,
+                        response: Response<TrackResponse>
+                    ) {
+                        rwTrack.isVisible = true
+                        holderNothingOrWrong.isVisible = false
+
+                        if (response.isSuccessful) {
+                            progressBar.isVisible = false
+                            tracks.clear()
+                            val answer = response.body()?.results
+                            if (answer?.isNotEmpty() == true) {
+                                tracks.addAll(response.body()?.results!!)
+                                showHistory = false
+                                adapter.data = tracks
+                            }
+                            if (tracks.isEmpty()) {
+                                progressBar.isVisible = false
+                                rwTrack.isVisible = false
+                                holderNothingOrWrong.isVisible = true
+                                sunOrWiFi.setImageResource(R.drawable.sun_ic)
+                                textHolder.setText(R.string.nothing)
+                                buttonResearch.isVisible = false
+                            }
+                        } else {
+                            progressBar.isVisible = false
+                            rwTrack.isVisible = false
+                            holderNothingOrWrong.isVisible = true
+                            sunOrWiFi.setImageResource(R.drawable.nointernet_ic)
+                            textHolder.setText(R.string.Wrong)
+                            buttonResearch.isVisible = true
+                        }
+                    }
+
+                    override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                        progressBar.isVisible = false
+                        rwTrack.isVisible = false
+                        holderNothingOrWrong.isVisible = true
+                        sunOrWiFi.setImageResource(R.drawable.nointernet_ic)
+                        textHolder.setText(R.string.Wrong)
+                        buttonResearch.isVisible = true
+                    }
+                })
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         if (showHistory) {
@@ -218,6 +255,7 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val SEARCH = "SEARCH"
-        const val AMOUNT = ""
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
