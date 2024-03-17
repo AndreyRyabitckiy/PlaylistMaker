@@ -9,7 +9,7 @@ import android.util.TypedValue
 
 const val RADIUS_CUT_IMAGE = 10f
 
-inline fun <reified T: Parcelable> Intent.parcelable(key: String): T? = when {
+inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
     SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getParcelableExtra(key, T::class.java)
     else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
 }
@@ -18,5 +18,6 @@ fun dpToPx(dp: Float, context: Context): Int {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         dp,
-        context.resources.displayMetrics).toInt()
+        context.resources.displayMetrics
+    ).toInt()
 }
