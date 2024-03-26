@@ -1,32 +1,34 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.player
 
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
+import com.example.playlistmaker.RADIUS_CUT_IMAGE
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.dpToPx
+import com.example.playlistmaker.parcelable
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class MusicPlayerActivity : AppCompatActivity() {
 
-    private val mainThreadHandler by lazy { Handler(Looper.getMainLooper()) }
 
-    private val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
     private var playerState = PlayerState.DEFAULT
     private var mediaPlayer = MediaPlayer()
     private var url: String? = " "
     private lateinit var playButton: MaterialButton
     private val timeMusic30 by lazy { findViewById<TextView>(R.id.timeMusic30Tv) }
+
+
+    private val viewModel by viewModels<MusicPlayerViewModel>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,13 +56,13 @@ class MusicPlayerActivity : AppCompatActivity() {
             url = track.previewUrl
             nameMusic.text = track.trackName
             groupName.text = track.artistName
-            timeMusic.text = dateFormat.format(track.trackTimeMillis.toLong())
+            timeMusic.text = track.trackTimeMillis
             if (track.collectionName == null) {
                 textGroup.isVisible = false
             } else {
                 groupMusic.text = track.collectionName
             }
-            ear.text = getFormattedDate(track.releaseDate)
+            ear.text = track.releaseDate
             typeMusic.text = track.primaryGenreName
             country.text = track.country
             val urlImage = track.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg")
@@ -69,38 +71,21 @@ class MusicPlayerActivity : AppCompatActivity() {
                 .load(urlImage)
                 .placeholder(R.drawable.placeholder_ic)
                 .centerInside()
-                .transform(RoundedCorners(dpToPx(RADIUS_CUT_IMAGE,this)))
+                .transform(RoundedCorners(dpToPx(RADIUS_CUT_IMAGE, this)))
                 .into(musicImage)
         }
 
         preparePlayer()
+
         playButton.setOnClickListener {
-            startTimerMusic()
+            viewModel.setPlayerPosition(mediaPlayer.currentPosition)
+            viewModel.startTimerMusic(playerState)
             playbackControl()
         }
-    }
 
-    private fun startTimerMusic() {
-        if (playerState == PlayerState.PREPARED || playerState == PlayerState.PAUSED)
-            mainThreadHandler?.post(
-                createUpdateTimerMusicTask()
-            ) else {
-            mainThreadHandler.removeCallbacksAndMessages(null)
-        }
-    }
-
-    private fun createUpdateTimerMusicTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                val timeMusicAnswer = mediaPlayer.currentPosition
-                if (timeMusicAnswer < MUSIC_TIME) {
-                    timeMusic30.text = dateFormat.format(timeMusicAnswer.toLong()).toString()
-                    mainThreadHandler.postDelayed(this, DELAY)
-                } else {
-                    timeMusic30.text = TIME_START
-                    mainThreadHandler.postDelayed(this, DELAY)
-                }
-            }
+        viewModel.timerLiveData.observe(this) {
+            timeMusic30.text = it
+            viewModel.setPlayerPosition(mediaPlayer.currentPosition)
         }
     }
 
@@ -111,19 +96,7 @@ class MusicPlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         mediaPlayer.release()
-        mainThreadHandler.removeCallbacksAndMessages(null)
         super.onDestroy()
-    }
-
-    private fun getFormattedDate(inputDate: String?): String {
-        inputDate ?: return ""
-
-        val dfIn = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val dfOut = SimpleDateFormat("yyyy", Locale.getDefault())
-
-        dfIn.parse(inputDate)?.let { date ->
-            return dfOut.format(date).orEmpty() ?: ""
-        } ?: return ""
     }
 
     @SuppressLint("SetTextI18n")
@@ -168,18 +141,5 @@ class MusicPlayerActivity : AppCompatActivity() {
 
     companion object {
         const val TRACK_KEY = "TRACK"
-        private const val DELAY = 300L
-        private const val MUSIC_TIME = 29900
-        private const val TIME_START = "00:00"
     }
-
-    enum class PlayerState {
-        DEFAULT,
-        PREPARED,
-        PLAYING,
-        PAUSED
-    }
-
 }
-
-

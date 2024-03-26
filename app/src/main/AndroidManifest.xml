@@ -16,13 +16,13 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31" >
         <activity
-            android:name=".MusicPlayerActivity"
+            android:name=".presentation.player.MusicPlayerActivity"
             android:exported="false" />
         <activity
             android:name=".MediaLibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".presentation.search.SearchActivity"
             android:exported="false" />
         <activity
             android:name=".SettingActivity"

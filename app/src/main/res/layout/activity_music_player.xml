@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/blackOrWhite"
     android:orientation="vertical"
-    tools:context=".MusicPlayerActivity">
+    tools:context=".presentation.player.MusicPlayerActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"
