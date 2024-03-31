@@ -28,8 +28,9 @@ class SearchActivity : AppCompatActivity() {
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
     val adapter by lazy { TrackAdapter() }
-    private val searchHistory by lazy { getSharedPreferences(HISTORY_MAIN, MODE_PRIVATE) }
-    private val viewModel by viewModels<SearchActivityViewModel>()
+    private val viewModel:SearchActivityViewModel by viewModels{
+        SearchActivityViewModel.Factory(this)
+    }
     private var searchStatus = ResponseStatus.SUCCESS
 
 
@@ -52,7 +53,7 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.sharedPrefsWork(searchHistory, USE_READ)
+        viewModel.sharedPrefsWork(USE_READ)
         viewModel.tracksHistory.observe(this) {
             historyTracks.clear()
             historyTracks.addAll(it)
@@ -105,7 +106,7 @@ class SearchActivity : AppCompatActivity() {
 
         adapter.onClick = { item ->
             if (clickDebounce()) {
-                viewModel.sharedPrefsWork(searchHistory, USE_WRITE, item)
+                viewModel.sharedPrefsWork(USE_WRITE, item)
                 val playerIntent = Intent(this@SearchActivity, MusicPlayerActivity::class.java)
                 playerIntent.putExtra(MusicPlayerActivity.TRACK_KEY, item)
                 startActivity(playerIntent)
@@ -122,7 +123,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.bClearHistorySearch.setOnClickListener {
             adapter.data.clear()
-            viewModel.sharedPrefsWork(searchHistory, USE_CLEAR)
+            viewModel.sharedPrefsWork(USE_CLEAR)
             binding.tvHistorySearch.isVisible = false
             binding.bClearHistorySearch.isVisible = false
         }

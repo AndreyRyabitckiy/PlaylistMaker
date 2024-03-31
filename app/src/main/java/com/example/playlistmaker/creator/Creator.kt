@@ -25,12 +25,12 @@ object Creator {
         return TracksInteractorImpl(getTracksRepository())
     }
 
-    private fun getSharedPrefsRepository(): SharedPrefsRepository {
-        return SharedPrefsRepositoryImpl(SearchHistoryStorageImpl())
+    private fun getSharedPrefsRepository(context: Context): SharedPrefsRepository {
+        return SharedPrefsRepositoryImpl(SearchHistoryStorageImpl(context))
     }
 
-    fun SharedPrefsInteractor(): SharedPrefsInteractor {
-        return SharedPrefsInteractorImpl(getSharedPrefsRepository())
+    fun SharedPrefsInteractor(context: Context): SharedPrefsInteractor {
+        return SharedPrefsInteractorImpl(getSharedPrefsRepository(context))
     }
 
     fun settingRepository(context: Context): SettingsRepository = SettingsRepositoryImpl(context)
