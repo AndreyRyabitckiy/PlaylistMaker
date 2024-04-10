@@ -18,8 +18,11 @@ import com.example.playlistmaker.search.domain.models.ResponseStatus
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.player.presentation.activity.MusicPlayerActivity
 import com.example.playlistmaker.search.presentation.view_model.SearchActivityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
+
+    private val viewModel:SearchActivityViewModel by viewModel<SearchActivityViewModel>()
 
     private val searchRunnable = Runnable { sendToServer() }
     private var searchString = ""
@@ -28,9 +31,6 @@ class SearchActivity : AppCompatActivity() {
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
     val adapter by lazy { TrackAdapter() }
-    private val viewModel:SearchActivityViewModel by viewModels{
-        SearchActivityViewModel.Factory(this)
-    }
     private var searchStatus = ResponseStatus.SUCCESS
 
 
@@ -225,7 +225,6 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH = "SEARCH"
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val HISTORY_MAIN = "historyMain"
         private const val USE_CLEAR = "clear"
         private const val USE_READ = "read"
         private const val USE_WRITE = "write"

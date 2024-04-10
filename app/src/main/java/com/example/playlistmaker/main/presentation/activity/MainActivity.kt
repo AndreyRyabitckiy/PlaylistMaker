@@ -10,13 +10,12 @@ import com.example.playlistmaker.main.presentation.view_model.MainViewModel
 import com.example.playlistmaker.media.presentation.activity.MediaLibraryActivity
 import com.example.playlistmaker.search.presentation.activity.SearchActivity
 import com.example.playlistmaker.settings.presentation.activity.SettingActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels {
-        MainViewModel.Factory(this)
-    }
+    private val viewModel: MainViewModel by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

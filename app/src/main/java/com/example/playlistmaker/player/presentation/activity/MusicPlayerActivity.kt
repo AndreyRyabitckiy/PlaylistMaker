@@ -15,12 +15,13 @@ import com.example.playlistmaker.dpToPx
 import com.example.playlistmaker.parcelable
 import com.example.playlistmaker.player.presentation.view_model.MusicPlayerViewModel
 import com.example.playlistmaker.player.presentation.view_model.PlayerState
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MusicPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMusicPlayerBinding
     private var url: String? = " "
-    private val viewModel by viewModels<MusicPlayerViewModel>()
+    private val viewModel: MusicPlayerViewModel by viewModel<MusicPlayerViewModel>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {

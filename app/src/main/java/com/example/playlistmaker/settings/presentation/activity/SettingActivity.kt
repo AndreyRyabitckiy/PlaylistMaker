@@ -7,12 +7,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.databinding.ActivitySettingBinding
 import com.example.playlistmaker.settings.presentation.view_model.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingActivity : AppCompatActivity() {
 
-    private val viewModel: SettingsViewModel by viewModels {
-        SettingsViewModel.Factory(this)
-    }
+    private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
     private lateinit var binding: ActivitySettingBinding
 
 

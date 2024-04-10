@@ -22,11 +22,11 @@ class MainViewModel(private val settingsInteractor: SettingsInteractor) : ViewMo
         _theme.postValue(settingsInteractor.getThemeSettings())
     }
 
-    class Factory(private val context: Context) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainViewModel(
-                SettingsInteractorImpl(Creator.settingRepository(context))
-            ) as T
-        }
-    }
+//    class Factory(private val context: Context) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            return MainViewModel(
+//                SettingsInteractorImpl(Creator.settingRepository(context))
+//            ) as T
+//        }
+//    }
 }

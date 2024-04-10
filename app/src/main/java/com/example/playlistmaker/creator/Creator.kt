@@ -17,23 +17,23 @@ import com.example.playlistmaker.settings.domain.ExternalNavigator
 import com.example.playlistmaker.settings.domain.SettingsRepository
 
 object Creator {
-    private fun getTracksRepository(): TracksRepository {
-        return TrackRepositoryImpl(RetrofitNetworkClient())
-    }
-
-    fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository())
-    }
-
-    private fun getSharedPrefsRepository(context: Context): SharedPrefsRepository {
-        return SharedPrefsRepositoryImpl(SearchHistoryStorageImpl(context))
-    }
-
-    fun SharedPrefsInteractor(context: Context): SharedPrefsInteractor {
-        return SharedPrefsInteractorImpl(getSharedPrefsRepository(context))
-    }
-
-    fun settingRepository(context: Context): SettingsRepository = SettingsRepositoryImpl(context)
-
-    fun externalNavigator(context: Context): ExternalNavigator = ExternalNavigatorImpl(context)
+//    private fun getTracksRepository(): TracksRepository {
+//        return TrackRepositoryImpl(RetrofitNetworkClient())
+//    }
+//
+//    fun provideTracksInteractor(): TracksInteractor {
+//        return TracksInteractorImpl(getTracksRepository())
+//    }
+//
+//    private fun getSharedPrefsRepository(context: Context): SharedPrefsRepository {
+//        return SharedPrefsRepositoryImpl(SearchHistoryStorageImpl(context))
+//    }
+//
+//    fun SharedPrefsInteractor(context: Context): SharedPrefsInteractor {
+//        return SharedPrefsInteractorImpl(getSharedPrefsRepository(context))
+//    }
+//
+//    fun settingRepository(context: Context): SettingsRepository = SettingsRepositoryImpl(context)
+//
+//    fun externalNavigator(context: Context): ExternalNavigator = ExternalNavigatorImpl(context)
 }
