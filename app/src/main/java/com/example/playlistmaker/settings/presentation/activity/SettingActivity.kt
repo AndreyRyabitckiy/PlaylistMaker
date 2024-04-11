@@ -1,30 +1,17 @@
 package com.example.playlistmaker.settings.presentation.activity
 
-import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.databinding.ActivitySettingBinding
-import com.example.playlistmaker.settings.data.ExternalNavigatorImpl
-import com.example.playlistmaker.settings.domain.ExternalNavigator
 import com.example.playlistmaker.settings.presentation.view_model.SettingsViewModel
-import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class SettingActivity : AppCompatActivity() {
 
     private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
     private lateinit var binding: ActivitySettingBinding
-
-    val navigator by inject<ExternalNavigatorImpl>{
-        parametersOf(
-            Context
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.di
 
-import android.content.Context
 import com.example.playlistmaker.search.data.SharedPrefsRepositoryImpl
 import com.example.playlistmaker.search.data.TrackRepositoryImpl
 import com.example.playlistmaker.search.domain.api.TracksRepository
@@ -22,8 +21,8 @@ val repositoryModule = module {
         SharedPrefsRepositoryImpl(storage = get())
     }
 
-    factory {(context:Context) ->
-        ExternalNavigatorImpl(context = context)
+    factory<ExternalNavigator> {
+        ExternalNavigatorImpl(context = androidContext())
     }
 
     single<TracksRepository> {

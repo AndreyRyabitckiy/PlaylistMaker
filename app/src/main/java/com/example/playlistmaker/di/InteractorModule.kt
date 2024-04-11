@@ -12,19 +12,19 @@ import org.koin.dsl.module
 
 val interatorModule = module {
 
-    single<SettingsInteractor> {
+    factory<SettingsInteractor> {
         SettingsInteractorImpl(repository = get())
     }
 
-    single<SharedPrefsInteractor> {
+    factory<SharedPrefsInteractor> {
         SharedPrefsInteractorImpl(repository = get())
     }
 
-    single<SharingInteractor> {
+    factory<SharingInteractor> {
         SharingInteractorImpl(externalNavigator = get(), settingsRepository = get())
     }
 
-    single<TracksInteractor> {
+    factory<TracksInteractor> {
         TracksInteractorImpl(repository = get())
     }
 }

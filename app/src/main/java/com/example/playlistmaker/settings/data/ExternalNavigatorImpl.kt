@@ -31,7 +31,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     override fun userPolicy(link: String) {
         val userPolicyOpen =
             Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                //userPolicyOpen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        userPolicyOpen.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
         context.startActivity(userPolicyOpen)
     }
 }

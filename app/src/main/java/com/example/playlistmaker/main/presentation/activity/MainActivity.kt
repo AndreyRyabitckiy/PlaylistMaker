@@ -3,7 +3,6 @@ package com.example.playlistmaker.main.presentation.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.databinding.ActivityMainBinding
 import com.example.playlistmaker.main.presentation.view_model.MainViewModel
