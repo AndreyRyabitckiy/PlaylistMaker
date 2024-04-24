@@ -103,4 +103,10 @@
         <item name="android:insetBottom">@dimen/o_0dp</item>
     </style>
 
+    <style name="TabStyle">
+        <item name="textAllCaps">false</item>
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/o_14dp</item>
+    </style>
+
 </resources>

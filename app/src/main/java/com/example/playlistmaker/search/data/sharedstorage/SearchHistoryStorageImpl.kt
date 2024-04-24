@@ -39,6 +39,5 @@ class SearchHistoryStorageImpl(private val sharedPreferences: SharedPreferences,
 
     companion object {
         private const val HISTORY = "history"
-        const val HISTORY_MAIN = "historyMain"
     }
 }
