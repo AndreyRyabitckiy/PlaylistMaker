@@ -13,11 +13,12 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
             putExtra(Intent.EXTRA_TEXT, link)
             type = "text/plain"
         }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent)
     }
 
     override fun sendSupport(email: String, textTop: String, text: String) {
-        Intent().apply {
+        Intent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).apply {
             action = Intent.ACTION_SENDTO
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
@@ -30,6 +31,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     override fun userPolicy(link: String) {
         val userPolicyOpen =
             Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        userPolicyOpen.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
         context.startActivity(userPolicyOpen)
     }
 }

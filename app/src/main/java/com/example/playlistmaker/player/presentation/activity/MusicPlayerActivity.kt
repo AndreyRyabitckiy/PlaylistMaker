@@ -3,24 +3,24 @@ package com.example.playlistmaker.player.presentation.activity
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.RADIUS_CUT_IMAGE
+import com.example.playlistmaker.app.RADIUS_CUT_IMAGE
 import com.example.playlistmaker.databinding.ActivityMusicPlayerBinding
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.dpToPx
-import com.example.playlistmaker.parcelable
+import com.example.playlistmaker.app.dpToPx
+import com.example.playlistmaker.app.parcelable
 import com.example.playlistmaker.player.presentation.view_model.MusicPlayerViewModel
 import com.example.playlistmaker.player.presentation.view_model.PlayerState
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MusicPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMusicPlayerBinding
     private var url: String? = " "
-    private val viewModel by viewModels<MusicPlayerViewModel>()
+    private val viewModel: MusicPlayerViewModel by viewModel<MusicPlayerViewModel>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
