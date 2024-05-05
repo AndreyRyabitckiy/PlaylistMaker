@@ -13,6 +13,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+const val HISTORY_MAIN = "historyMain"
+
 val dataModule = module {
     single<SearchHistoryStorage> {
         SearchHistoryStorageImpl(get(), get())
@@ -29,7 +31,7 @@ val dataModule = module {
 
     single {
         androidContext().getSharedPreferences(
-            SearchHistoryStorageImpl.HISTORY_MAIN,
+            HISTORY_MAIN,
             Context.MODE_PRIVATE
         )
     }
