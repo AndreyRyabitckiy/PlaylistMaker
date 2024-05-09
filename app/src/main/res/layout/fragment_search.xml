@@ -6,13 +6,10 @@
     android:layout_height="match_parent"
     android:background="@color/blackOrWhite"
     android:orientation="vertical"
-    tools:ignore="MissingDefaultResource">
+    tools:ignore="MissingDefaultResource"
+    tools:context=".search.presentation.fragment.SearchFragment">
 
     <LinearLayout style="@style/LinearSettings">
-
-        <ImageView
-            android:id="@+id/ivToolBar"
-            style="@style/BackButton" />
 
         <TextView
             style="@style/TopText"
@@ -45,7 +42,7 @@
             android:paddingHorizontal="@dimen/o_16dp"
             android:paddingVertical="@dimen/o_12dp"
             android:singleLine="true"
-            android:textColor="@color/black"
+            android:textCursorDrawable="@drawable/text_cursor"
             android:textColorHint="@color/greyOrBlack"
             android:textSize="@dimen/_16sp" />
 

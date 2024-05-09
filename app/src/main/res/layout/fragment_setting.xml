@@ -6,16 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/blackOrWhite"
     android:orientation="vertical"
-    tools:ignore="MissingDefaultResource">
+    tools:ignore="MissingDefaultResource"
+    tools:context=".settings.presentation.fragment.SettingsFragment">
 
     <LinearLayout
         style="@style/LinearSettings"
         android:layout_marginStart="@dimen/o_4dp">
-
-        <ImageView
-            android:id="@+id/ivToolBar"
-            style="@style/BackButton"
-            tools:ignore="ContentDescription,InvalidId,UseAppTint" />
 
         <TextView
             style="@style/TopText"

@@ -1,28 +1,33 @@
-package com.example.playlistmaker.settings.presentation.activity
+package com.example.playlistmaker.settings.presentation.fragment
 
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.databinding.ActivitySettingBinding
+import androidx.fragment.app.Fragment
+import com.example.playlistmaker.databinding.FragmentSettingBinding
 import com.example.playlistmaker.settings.presentation.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingActivity : AppCompatActivity() {
-
+class SettingsFragment:Fragment() {
+    private var binding:FragmentSettingBinding? = null
     private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
-    private lateinit var binding: ActivitySettingBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySettingBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSettingBinding.inflate(inflater,container,false)
+        return binding?.root
+    }
 
-        with(binding) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-            ivToolBar.setOnClickListener {
-                finish()
-            }
+        binding?.run {
 
             llShareApp.setOnClickListener {
                 viewModel.shareApp()
@@ -47,17 +52,22 @@ class SettingActivity : AppCompatActivity() {
         }
 
 
-        viewModel.theme.observe(this) {
+        viewModel.theme.observe(viewLifecycleOwner) {
             val checked = if (it == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
                 getSystemNightMode()
             } else {
                 it == AppCompatDelegate.MODE_NIGHT_YES
             }
 
-            binding.sDayornight.isChecked = checked
+            binding?.sDayornight?.isChecked = checked
 
             switchTheme(it)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     private fun getSystemNightMode() = resources

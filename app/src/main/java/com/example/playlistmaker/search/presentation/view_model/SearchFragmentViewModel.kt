@@ -8,7 +8,7 @@ import com.example.playlistmaker.search.domain.models.ResponseStatus
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.sharedprefs.SharedPrefsInteractor
 
-class SearchActivityViewModel(
+class SearchFragmentViewModel(
     private val sharedPrefsInteractor: SharedPrefsInteractor,
     private val tracksInteractor: TracksInteractor
 ) : ViewModel() {

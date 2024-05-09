@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.presentation.activity
+package com.example.playlistmaker.media.presentation.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.example.playlistmaker.media.presentation.view_model.LikeMusicViewMode
 class FragmentLikeMusic: Fragment() {
 
     private val viewModel: LikeMusicViewModel by viewModels<LikeMusicViewModel>()
-    private lateinit var binding: FragmentLikeMusicBinding
+    private var binding: FragmentLikeMusicBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,11 +20,16 @@ class FragmentLikeMusic: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLikeMusicBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     companion object {

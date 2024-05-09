@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.presentation.activity
+package com.example.playlistmaker.media.presentation.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
