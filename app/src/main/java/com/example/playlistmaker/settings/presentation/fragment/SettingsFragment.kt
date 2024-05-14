@@ -12,7 +12,8 @@ import com.example.playlistmaker.settings.presentation.view_model.SettingsViewMo
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment:Fragment() {
-    private var binding:FragmentSettingBinding? = null
+    private var _binding:FragmentSettingBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
 
     override fun onCreateView(
@@ -20,14 +21,14 @@ class SettingsFragment:Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSettingBinding.inflate(inflater,container,false)
-        return binding?.root
+        _binding = FragmentSettingBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.run {
+        binding.run {
 
             llShareApp.setOnClickListener {
                 viewModel.shareApp()
@@ -51,7 +52,6 @@ class SettingsFragment:Fragment() {
             }
         }
 
-
         viewModel.theme.observe(viewLifecycleOwner) {
             val checked = if (it == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
                 getSystemNightMode()
@@ -59,15 +59,15 @@ class SettingsFragment:Fragment() {
                 it == AppCompatDelegate.MODE_NIGHT_YES
             }
 
-            binding?.sDayornight?.isChecked = checked
-
+            binding.sDayornight?.isChecked = checked
             switchTheme(it)
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun getSystemNightMode() = resources

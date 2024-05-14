@@ -13,7 +13,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaLibraryFragment:Fragment() {
-    private var binding:FragmentMediaLibraryBinding? = null
+    private var _binding:FragmentMediaLibraryBinding? = null
+    private val binding get() = _binding!!
     private lateinit var tabMediator: TabLayoutMediator
     private val viewModel: MediaLibraryViewModel by viewModel<MediaLibraryViewModel>()
 
@@ -22,14 +23,14 @@ class MediaLibraryFragment:Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMediaLibraryBinding.inflate(inflater, container,false)
-        return binding?.root
+        _binding = FragmentMediaLibraryBinding.inflate(inflater, container,false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.run {
+        binding.run {
 
             viewPager.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
 
@@ -52,7 +53,7 @@ class MediaLibraryFragment:Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        _binding = null
         tabMediator.detach()
     }
 }

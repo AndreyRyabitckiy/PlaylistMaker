@@ -11,8 +11,8 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> FragmentLikeMusic.newInstance()
-            else -> FragmentPlaylist.newInstance()
+            0 -> LikeMusicFragment.newInstance()
+            else -> PlaylistFragment.newInstance()
         }
     }
 

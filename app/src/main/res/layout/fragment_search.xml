@@ -33,6 +33,7 @@
             android:background="@drawable/edit_form"
             android:drawableStart="@drawable/search_icon16"
             android:drawablePadding="@dimen/o_8dp"
+            android:textColor="@color/black"
             android:drawableTint="@color/greyOrBlack"
             android:hint="@string/searchDisp"
             android:imeOptions="actionDone"

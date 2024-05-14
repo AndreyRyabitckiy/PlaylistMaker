@@ -9,6 +9,11 @@ interface SharedPrefsInteractor {
         consumer: SharedPrefsConsumer
     )
 
+    fun readWriteClearWithoutConsumer(
+        use: String,
+        track: Track?
+    ): List<Track>
+
     interface SharedPrefsConsumer {
         fun consume(foundSharedPrefs: ArrayList<Track>)
     }

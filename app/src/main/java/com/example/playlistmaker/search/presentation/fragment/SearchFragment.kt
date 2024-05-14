@@ -2,8 +2,6 @@ package com.example.playlistmaker.search.presentation.fragment
 
 import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -22,119 +20,48 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.presentation.view_model.SearchFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment:Fragment() {
-    private var binding: FragmentSearchBinding? = null
-    private val viewModel: SearchFragmentViewModel by viewModel<SearchFragmentViewModel>()
-    private val searchRunnable = Runnable { sendToServer() }
-    private var searchString = ""
-    private var showHistory = false
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
+class SearchFragment : Fragment() {
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: SearchFragmentViewModel by viewModel()
     val adapter by lazy { TrackAdapter() }
-    private var searchStatus = ResponseStatus.SUCCESS
-    val historyTracks: ArrayList<Track> = arrayListOf()
-    val tracks = ArrayList<Track>()
+    private var debounceClick = true
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchBinding.inflate(inflater,container,false)
-        return binding?.root
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.sharedPrefsWork(USE_READ)
-        viewModel.tracksHistory.observe(viewLifecycleOwner) {
-            historyTracks.clear()
-            historyTracks.addAll(it)
-        }
-
         viewModel.tracks.observe(viewLifecycleOwner) {
-            tracks.clear()
-            binding?.run {
-                when (searchStatus) {
-                    ResponseStatus.SUCCESS -> {
-                        tracks.addAll(it)
-                        if (tracks.isNotEmpty()) {
-                            progressBar.isVisible = false
-                            rwTrack.isVisible = true
-                            showHistory = false
-                            adapter.data = tracks
-                        }
-                        if (tracks.isEmpty()) {
-                            progressBar.isVisible = false
-                            rwTrack.isVisible = false
-                            llHolderNothingOrWrong.isVisible = true
-                            ivSunOrWiFi.setImageResource(R.drawable.sun_ic)
-                            tvTextHolder.setText(R.string.nothing)
-                            btReserch.isVisible = false
-                        }
-                    }
-
-                    ResponseStatus.ERROR -> {
-                        progressBar.isVisible = false
-                        rwTrack.isVisible = false
-                        llHolderNothingOrWrong.isVisible = true
-                        ivSunOrWiFi.setImageResource(R.drawable.nointernet_ic)
-                        tvTextHolder.setText(R.string.Wrong)
-                        btReserch.isVisible = true
-                    }
-                }
-            }
+            adapter.data = it
+        }
+        viewModel.isClickAllowed.observe(viewLifecycleOwner){
+            debounceClick = it
         }
 
-        viewModel.searchStatus.observe(viewLifecycleOwner) {
-            searchStatus = it
+        viewModel.searchStatus.observe(viewLifecycleOwner) { tracksListChanged(it) }
+        viewModel.showHistory.observe(viewLifecycleOwner) { answer->
+                binding.bClearHistorySearch.isVisible = answer
+                binding.tvHistorySearch.isVisible = answer
         }
 
-        fun clickDebounce(): Boolean  {
-            val current = isClickAllowed
-            if (isClickAllowed) {
-                isClickAllowed = false
-                handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-            }
-            return current
-        }
+        adapter.onClick = { item -> onClickAdapter(item) }
 
-        adapter.onClick = { item ->
-            if (clickDebounce()) {
-                viewModel.sharedPrefsWork(USE_WRITE, item)
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_musicPlayerFragment,
-                    bundleOf(TRACK_KEY to item)
-                )
-            }
-        }
-        binding?.run {
+        binding.run {
             rwTrack.adapter = adapter
 
-            etSearchText.setText(searchString)
-
             bClearHistorySearch.setOnClickListener {
-                adapter.data.clear()
-                viewModel.sharedPrefsWork(USE_CLEAR)
-                tvHistorySearch.isVisible = false
-                bClearHistorySearch.isVisible = false
+                clearHistory()
             }
 
-            etSearchText.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus && etSearchText.text.isEmpty()) {
-                    showHistory = true
-                    adapter.data = historyTracks
-                    if (historyTracks.isNotEmpty()) {
-                        tvHistorySearch.isVisible = true
-                        bClearHistorySearch.isVisible = true
-                    }
-                } else {
-                    tvHistorySearch.isVisible = false
-                    bClearHistorySearch.isVisible = false
-                }
-
-            }
+            etSearchText.setOnFocusChangeListener { _, hasFocus -> focusListenerUse(hasFocus) }
 
             val simpleTextWatcher = object : TextWatcher {
                 override fun beforeTextChanged(
@@ -143,52 +70,19 @@ class SearchFragment:Fragment() {
                     count: Int,
                     after: Int
                 ) {
-                    showHistory = true
-                    adapter.data = historyTracks
-                }
 
+                }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    searchDebounce()
-                    ivClearIcon.isVisible = !s.isNullOrEmpty()
-                    searchString = etSearchText.toString()
-
-                    if (etSearchText.hasFocus() && s?.isEmpty() == true) {
-                        if (historyTracks.isNotEmpty()) {
-                            rwTrack.isVisible = true
-                            tvHistorySearch.isVisible = true
-                            bClearHistorySearch.isVisible = true
-                        }
-                        llHolderNothingOrWrong.isVisible = false
-                    } else {
-                        showHistory = false
-                        adapter.data = tracks
-                        tvHistorySearch.isVisible = false
-                        bClearHistorySearch.isVisible = false
-                        llHolderNothingOrWrong.isVisible = false
-                    }
+                    etTextChangedWatcher(s)
                 }
-
                 override fun afterTextChanged(s: Editable?) {
-                    // empty
+                    //empty
                 }
             }
 
             etSearchText.addTextChangedListener(simpleTextWatcher)
-
-            ivClearIcon.setOnClickListener {
-                etSearchText.setText("")
-                val inputMethodManager =
-                    requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(etSearchText.windowToken, 0)
-                tracks.clear()
-                showHistory = true
-                adapter.data = historyTracks
-            }
-
-            btReserch.setOnClickListener {
-                sendToServer()
-            }
-
+            ivClearIcon.setOnClickListener { clearTextButtonUse() }
+            btReserch.setOnClickListener { sendToServer() }
             etSearchText.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     sendToServer()
@@ -198,38 +92,119 @@ class SearchFragment:Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (showHistory) {
-            adapter.data = historyTracks
+    private fun onClickAdapter(track: Track) {
+        if (debounceClick) {
+        viewModel.writeHistory(track)
+        viewModel.clickDebounce()
+        findNavController().navigate(
+            R.id.action_searchFragment_to_musicPlayerFragment,
+            bundleOf(TRACK_KEY to track)
+        )
         }
     }
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+
+
+    private fun tracksListChanged(searchStatus: ResponseStatus) {
+        binding.run {
+            when (searchStatus) {
+                ResponseStatus.SUCCESS -> {
+                    progressBar.isVisible = false
+                    rwTrack.isVisible = true
+                }
+
+                ResponseStatus.EMPTY -> {
+                    progressBar.isVisible = false
+                    showHolder(true)
+                    ivSunOrWiFi.setImageResource(R.drawable.sun_ic)
+                    tvTextHolder.setText(R.string.nothing)
+                    btReserch.isVisible = false
+                }
+
+                ResponseStatus.LOADING -> {
+                    progressBar.isVisible = true
+                }
+
+                ResponseStatus.ERROR -> {
+                    progressBar.isVisible = false
+                    showHolder(true)
+                    ivSunOrWiFi.setImageResource(R.drawable.nointernet_ic)
+                    tvTextHolder.setText(R.string.Wrong)
+                    btReserch.isVisible = true
+                }
+            }
+        }
     }
 
-    private fun sendToServer() = binding?.run {
+    private fun clearHistory() {
+        viewModel.clearHistory()
+        viewModel.showHistoryBoolean(false)
+    }
+
+    private fun focusListenerUse(hasFocus: Boolean) {
+        binding.run {
+            if (hasFocus && etSearchText.text.isEmpty()) {
+                showHolder(false)
+                viewModel.showHistoryBoolean(true)
+            } else {
+                viewModel.showHistoryBoolean(false, rewrite = false)
+            }
+        }
+    }
+
+    private fun etTextChangedWatcher(s: CharSequence?) {
+        viewModel
+        binding.run {
+            ivClearIcon.isVisible = !s.isNullOrEmpty()
+            s?.let {
+                viewModel.setSearchText(it.toString())
+            }
+            if (etSearchText.hasFocus() && s?.isEmpty() == true) {
+                viewModel.showHistoryBoolean(true)
+                bClearHistorySearch.isVisible = true
+                showHolder(false)
+            } else if (etSearchText.hasFocus()) {
+                viewModel.searchDebounce()
+                viewModel.showHistoryBoolean(false)
+                showHolder(false)
+            }
+        }
+    }
+
+    private fun showHolder(state: Boolean) = with(binding) {
+        llHolderNothingOrWrong.isVisible = state
+        rwTrack.isVisible = !state
+    }
+
+    private fun clearTextButtonUse() {
+        binding.etSearchText.setText("")
+        val inputMethodManager =
+            requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.etSearchText.windowToken, 0)
+        viewModel.showHistoryBoolean(true)
+        binding.tvHistorySearch.isVisible = true
+        binding.bClearHistorySearch.isVisible = true
+    }
+
+    private fun sendToServer() = binding.run {
         if (etSearchText.text.isNotBlank()) {
             viewModel.searchTracks(etSearchText.text.toString())
-            rwTrack.isVisible = false
-            llHolderNothingOrWrong.isVisible = false
+            showHolder(false)
             btReserch.isVisible = false
             progressBar.isVisible = true
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.resume()
     }
 
     companion object {
         private const val TRACK_KEY = "TRACK"
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val USE_CLEAR = "clear"
-        private const val USE_READ = "read"
-        private const val USE_WRITE = "write"
     }
 }

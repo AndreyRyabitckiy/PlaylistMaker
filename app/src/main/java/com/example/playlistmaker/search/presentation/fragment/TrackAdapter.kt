@@ -9,7 +9,7 @@ import java.util.ArrayList
 
 class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
-    var data: ArrayList<Track> = arrayListOf()
+    var data: List<Track> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
