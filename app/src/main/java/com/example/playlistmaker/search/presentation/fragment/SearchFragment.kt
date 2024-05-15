@@ -94,12 +94,13 @@ class SearchFragment : Fragment() {
 
     private fun onClickAdapter(track: Track) {
         if (debounceClick) {
-        viewModel.writeHistory(track)
-        viewModel.clickDebounce()
-        findNavController().navigate(
-            R.id.action_searchFragment_to_musicPlayerFragment,
-            bundleOf(TRACK_KEY to track)
-        )
+            debounceClick = false
+            viewModel.writeHistory(track)
+            viewModel.clickDebounce()
+            findNavController().navigate(
+                R.id.action_searchFragment_to_musicPlayerFragment,
+                bundleOf(TRACK_KEY to track)
+            )
         }
     }
 

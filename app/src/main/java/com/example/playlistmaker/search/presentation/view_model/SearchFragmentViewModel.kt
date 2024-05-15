@@ -26,11 +26,16 @@ class SearchFragmentViewModel(
         _isClickAllowed.value?.let { isAllowed ->
             if (isAllowed) {
                 _isClickAllowed.postValue(false)
-                handler.postDelayed({ _isClickAllowed.postValue(true) }, CLICK_DEBOUNCE_DELAY)
+                handler.postDelayed(
+                    {
+                        _isClickAllowed.postValue(true)
+                    },
+                    CLICK_DEBOUNCE_DELAY
+                )
             }
         }
     }
-    private val _isClickAllowed = MutableLiveData(true)
+    private val _isClickAllowed = MutableLiveData<Boolean>()
     val isClickAllowed: LiveData<Boolean>
         get() = _isClickAllowed
 
@@ -101,6 +106,8 @@ class SearchFragmentViewModel(
         if (_showHistory.value == true) {
             _tracks.postValue(historyTracks)
         }
+
+        _isClickAllowed.postValue(true)
     }
 
     private fun sharedPrefsWork(uses: String, track: Track? = null) {
