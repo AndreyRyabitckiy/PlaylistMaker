@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.presentation.activity
+package com.example.playlistmaker.media.presentation.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -11,8 +11,8 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> FragmentLikeMusic.newInstance()
-            else -> FragmentPlaylist.newInstance()
+            0 -> LikeMusicFragment.newInstance()
+            else -> PlaylistFragment.newInstance()
         }
     }
 

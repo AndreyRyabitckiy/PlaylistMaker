@@ -8,5 +8,7 @@ data class TrackResults(
 
 enum class ResponseStatus {
     SUCCESS,
+    LOADING,
+    EMPTY,
     ERROR
 }

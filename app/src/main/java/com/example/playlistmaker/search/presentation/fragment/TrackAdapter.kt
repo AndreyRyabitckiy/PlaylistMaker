@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.presentation.activity
+package com.example.playlistmaker.search.presentation.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import java.util.ArrayList
 
 class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
-    var data: ArrayList<Track> = arrayListOf()
+    var data: List<Track> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()

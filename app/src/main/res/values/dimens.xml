@@ -35,4 +35,5 @@
     <dimen name="o_52dp">52dp</dimen>
     <dimen name="o_28dp">28dp</dimen>
     <dimen name="o_13sp">13sp</dimen>
+    <dimen name="size_cursor">2dp</dimen>
 </resources>
