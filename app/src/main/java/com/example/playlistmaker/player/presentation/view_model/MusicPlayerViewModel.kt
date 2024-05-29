@@ -1,11 +1,13 @@
 package com.example.playlistmaker.player.presentation.view_model
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -17,6 +19,7 @@ class MusicPlayerViewModel : ViewModel() {
     private var mediaPlayerState = PlayerState.DEFAULT
 
     private val _timerLiveData = MutableLiveData<String>()
+    private var timerJob: Job? = null
     val timerLiveData: LiveData<String>
         get() = _timerLiveData
 
@@ -25,41 +28,32 @@ class MusicPlayerViewModel : ViewModel() {
     val playerState: LiveData<PlayerState>
         get() = _playerState
 
-    private val mainThreadHandler by lazy { Handler(Looper.getMainLooper()) }
-
     private var playerPosition: Long = 0L
 
     fun setPlayerPosition() {
         playerPosition = mediaPlayer.currentPosition.toLong()
     }
 
-    private fun createUpdateTimerMusicTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
-
-                if (playerPosition < MUSIC_TIME) {
+    private fun createUpdateTimerMusicTask() {
+        timerJob = viewModelScope.launch {
+            while (mediaPlayerState == PlayerState.PLAYING) {
+                delay(DELAY)
                     _timerLiveData.postValue(dateFormat.format(playerPosition).toString())
-                    mainThreadHandler.postDelayed(this, DELAY)
-                } else {
-                    _timerLiveData.postValue(TIME_START)
-                    mainThreadHandler.postDelayed(this, DELAY)
-                }
             }
         }
     }
 
     fun startTimerMusic() {
-        if (mediaPlayerState == PlayerState.PREPARED || mediaPlayerState == PlayerState.PAUSED)
-            mainThreadHandler.post(
-                createUpdateTimerMusicTask()
-            ) else {
-            mainThreadHandler.removeCallbacksAndMessages(null)
+        if (mediaPlayerState == PlayerState.PLAYING) {
+            createUpdateTimerMusicTask()
+        } else {
+            timerJob?.cancel()
         }
     }
 
     override fun onCleared() {
         super.onCleared()
-        mainThreadHandler.removeCallbacksAndMessages(null)
+        timerJob?.cancel()
     }
 
     fun preparePlayer(url: String) {
@@ -70,21 +64,24 @@ class MusicPlayerViewModel : ViewModel() {
         }
 
         mediaPlayer.setOnCompletionListener {
-            _playerState.postValue(mediaPlayerState)
+            _timerLiveData.postValue(TIME_START)
             mediaPlayerState = PlayerState.PREPARED
+            _playerState.postValue(mediaPlayerState)
+            timerJob?.cancel()
         }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        _playerState.postValue(mediaPlayerState)
         mediaPlayerState = PlayerState.PLAYING
+        _playerState.postValue(mediaPlayerState)
+
     }
 
     fun pausePlayer() {
         mediaPlayer.pause()
-        _playerState.postValue(mediaPlayerState)
         mediaPlayerState = PlayerState.PAUSED
+        _playerState.postValue(mediaPlayerState)
     }
 
     fun mediaPlayerRelease() {
@@ -104,7 +101,6 @@ class MusicPlayerViewModel : ViewModel() {
         }
     }
     companion object {
-        private const val MUSIC_TIME = 29900
         private const val TIME_START = "00:00"
         private const val DELAY = 300L
     }

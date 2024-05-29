@@ -1,37 +1,32 @@
 package com.example.playlistmaker.search.presentation.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.ResponseStatus
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.sharedprefs.SharedPrefsInteractor
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchFragmentViewModel(
     private val sharedPrefsInteractor: SharedPrefsInteractor,
     private val tracksInteractor: TracksInteractor
 ) : ViewModel() {
 
-    private val searchRunnable = Runnable {
-        if (searchText.isNotBlank()) {
-            searchTracks(searchText)
-        }
-    }
-    private val handler = Handler(Looper.getMainLooper())
+    private var searchJob: Job? = null
 
     fun clickDebounce() {
         _isClickAllowed.value?.let { isAllowed ->
             if (isAllowed) {
                 _isClickAllowed.postValue(false)
-                handler.postDelayed(
-                    {
-                        _isClickAllowed.postValue(true)
-                    },
-                    CLICK_DEBOUNCE_DELAY
-                )
+                viewModelScope.launch {
+                    delay(CLICK_DEBOUNCE_DELAY)
+                    _isClickAllowed.postValue(true)
+                }
             }
         }
     }
@@ -71,24 +66,35 @@ class SearchFragmentViewModel(
     fun setSearchText(text: String) {
         searchText = text
     }
+
+    private var latestSearchText: String? = null
     fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+
+        if (latestSearchText == searchText){
+            return
+        }
+
+        latestSearchText = searchText
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            searchTracks(searchText)
+        }
     }
 
     fun searchTracks(trackName: String) {
         _searchStatus.postValue(ResponseStatus.LOADING)
-        tracksInteractor.searchTracks(
-            trackName,
-            consumer = object : TracksInteractor.TracksConsumer {
-                override fun consume(foundTrack: List<Track>, status: ResponseStatus) {
-                    _searchStatus.postValue(status)
-                    _tracks.postValue(foundTrack)
-                    if (status == ResponseStatus.SUCCESS) {
+        viewModelScope.launch {
+            tracksInteractor
+                .searchTracks(trackName)
+                .collect { pair ->
+                    _searchStatus.postValue(pair.second)
+                    _tracks.postValue(pair.first)
+                    if (pair.second == ResponseStatus.SUCCESS) {
                         _showHistory.postValue(false)
                     }
                 }
-            })
+        }
     }
 
     private fun getHistory() = sharedPrefsInteractor.readWriteClearWithoutConsumer(USE_READ, null)
