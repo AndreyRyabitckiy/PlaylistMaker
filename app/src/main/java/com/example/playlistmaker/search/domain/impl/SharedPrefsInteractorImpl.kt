@@ -6,7 +6,7 @@ import com.example.playlistmaker.search.domain.sharedprefs.SharedPrefsRepository
 
 class SharedPrefsInteractorImpl(private val repository: SharedPrefsRepository) :
     SharedPrefsInteractor {
-    override fun readWriteClear(
+    override suspend fun readWriteClear(
         use: String,
         track: Track?,
         consumer: SharedPrefsInteractor.SharedPrefsConsumer
@@ -14,7 +14,7 @@ class SharedPrefsInteractorImpl(private val repository: SharedPrefsRepository) :
         consumer.consume(repository.saveReadClear(use, track))
     }
 
-    override fun readWriteClearWithoutConsumer(use: String, track: Track?): List<Track> {
+    override suspend fun readWriteClearWithoutConsumer(use: String, track: Track?): List<Track> {
         return repository.saveReadClear(use, track)
     }
 }

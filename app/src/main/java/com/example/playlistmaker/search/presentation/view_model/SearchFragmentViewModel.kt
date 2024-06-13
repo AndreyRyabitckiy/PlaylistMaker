@@ -8,9 +8,12 @@ import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.ResponseStatus
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.sharedprefs.SharedPrefsInteractor
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class SearchFragmentViewModel(
     private val sharedPrefsInteractor: SharedPrefsInteractor,
@@ -30,6 +33,7 @@ class SearchFragmentViewModel(
             }
         }
     }
+
     private val _isClickAllowed = MutableLiveData<Boolean>()
     val isClickAllowed: LiveData<Boolean>
         get() = _isClickAllowed
@@ -40,9 +44,10 @@ class SearchFragmentViewModel(
         get() = getHistory()
 
     private val _showHistory = MutableLiveData<Boolean>(false)
-    val showHistory:LiveData<Boolean>
+    val showHistory: LiveData<Boolean>
         get() = _showHistory
-    fun showHistoryBoolean(answer:Boolean, rewrite: Boolean = true) {
+
+    fun showHistoryBoolean(answer: Boolean, rewrite: Boolean = true) {
         if (answer) {
             if (historyTracks.isNotEmpty()) {
                 _tracks.postValue(historyTracks)
@@ -50,7 +55,7 @@ class SearchFragmentViewModel(
             } else {
                 _showHistory.postValue(false)
             }
-        } else if (rewrite){
+        } else if (rewrite) {
             _showHistory.postValue(false)
             _tracks.postValue(emptyList())
         }
@@ -70,7 +75,7 @@ class SearchFragmentViewModel(
     private var latestSearchText: String? = null
     fun searchDebounce() {
 
-        if (latestSearchText == searchText){
+        if (latestSearchText == searchText) {
             return
         }
 
@@ -83,21 +88,27 @@ class SearchFragmentViewModel(
     }
 
     fun searchTracks(trackName: String) {
-        _searchStatus.postValue(ResponseStatus.LOADING)
-        viewModelScope.launch {
-            tracksInteractor
-                .searchTracks(trackName)
-                .collect { pair ->
-                    _searchStatus.postValue(pair.second)
-                    _tracks.postValue(pair.first)
-                    if (pair.second == ResponseStatus.SUCCESS) {
-                        _showHistory.postValue(false)
+        if (trackName.isNotEmpty()) {
+            _searchStatus.postValue(ResponseStatus.LOADING)
+            viewModelScope.launch {
+                tracksInteractor
+                    .searchTracks(trackName)
+                    .collect { pair ->
+                        _searchStatus.postValue(pair.second)
+                        _tracks.postValue(pair.first)
+                        if (pair.second == ResponseStatus.SUCCESS) {
+                            _showHistory.postValue(false)
+                        }
                     }
-                }
+            }
         }
     }
 
-    private fun getHistory() = sharedPrefsInteractor.readWriteClearWithoutConsumer(USE_READ, null)
+    private fun getHistory() = runBlocking {
+        async(Dispatchers.IO) {
+            sharedPrefsInteractor.readWriteClearWithoutConsumer(USE_READ, null)
+        }.await()
+    }
 
     fun writeHistory(track: Track?) {
         sharedPrefsWork(USE_WRITE, track)
@@ -116,18 +127,19 @@ class SearchFragmentViewModel(
         _isClickAllowed.postValue(true)
     }
 
-    private fun sharedPrefsWork(uses: String, track: Track? = null) {
-        sharedPrefsInteractor.readWriteClear(
-            uses,
-            track,
-            consumer = object : SharedPrefsInteractor.SharedPrefsConsumer {
-                override fun consume(foundSharedPrefs: ArrayList<Track>) {
+    private fun sharedPrefsWork(uses: String, track: Track? = null) =
+        viewModelScope.launch(Dispatchers.IO) {
+            sharedPrefsInteractor.readWriteClear(
+                uses,
+                track,
+                consumer = object : SharedPrefsInteractor.SharedPrefsConsumer {
+                    override fun consume(foundSharedPrefs: ArrayList<Track>) {
 
-                }
-            })
-    }
+                    }
+                })
+        }
 
-    companion object{
+    companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val USE_CLEAR = "clear"

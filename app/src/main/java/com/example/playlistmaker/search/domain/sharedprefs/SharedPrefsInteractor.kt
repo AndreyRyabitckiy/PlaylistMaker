@@ -3,13 +3,13 @@ package com.example.playlistmaker.search.domain.sharedprefs
 import com.example.playlistmaker.search.domain.models.Track
 
 interface SharedPrefsInteractor {
-    fun readWriteClear(
+    suspend fun readWriteClear(
         use: String,
         track: Track?,
         consumer: SharedPrefsConsumer
     )
 
-    fun readWriteClearWithoutConsumer(
+    suspend fun readWriteClearWithoutConsumer(
         use: String,
         track: Track?
     ): List<Track>

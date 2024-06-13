@@ -13,7 +13,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
             putExtra(Intent.EXTRA_TEXT, link)
             type = "text/plain"
         }
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 
@@ -31,7 +31,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     override fun userPolicy(link: String) {
         val userPolicyOpen =
             Intent(Intent.ACTION_VIEW, Uri.parse(link))
-        userPolicyOpen.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
+        userPolicyOpen.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(userPolicyOpen)
     }
 }

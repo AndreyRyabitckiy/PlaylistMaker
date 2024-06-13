@@ -1,5 +1,6 @@
 package com.example.playlistmaker.search.data
 
+import com.example.playlistmaker.db.data.AppDatabase
 import com.example.playlistmaker.search.data.dto.TrackResponse
 import com.example.playlistmaker.search.data.dto.TrackSearchRequest
 import com.example.playlistmaker.search.domain.api.TracksRepository
@@ -11,11 +12,15 @@ import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
+class TrackRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val appDatabase: AppDatabase
+) : TracksRepository {
 
     override fun searchTracks(expression: String): Flow<TrackResults> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         if (response.resultCode == 200) {
+            val likedTrackId = appDatabase.trackDao().getTracksIdList()
             emit(TrackResults(
                 status = if ((response as TrackResponse).results.isEmpty()) {
                     ResponseStatus.EMPTY
@@ -33,17 +38,24 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TracksRepo
                         releaseDate = getFormattedDate(it.releaseDate),
                         primaryGenreName = it.primaryGenreName,
                         country = it.country,
-                        previewUrl = it.previewUrl
+                        previewUrl = it.previewUrl,
+                        isLiked = isFavoriteBoolean(it.trackId, likedTrackId)
+
                     )
                 }
             )
             )
         } else {
-            emit(TrackResults(
-                status = ResponseStatus.ERROR
-            ))
+            emit(
+                TrackResults(
+                    status = ResponseStatus.ERROR
+                )
+            )
         }
     }
+
+    private fun isFavoriteBoolean(trackId: String, list: List<String>) =
+        list.find { likedTrack -> likedTrack == trackId } != null
 
     private fun getFormattedDate(inputDate: String?): String {
         inputDate ?: return ""

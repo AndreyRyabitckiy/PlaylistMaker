@@ -59,7 +59,7 @@ class SettingsFragment:Fragment() {
                 it == AppCompatDelegate.MODE_NIGHT_YES
             }
 
-            binding.sDayornight?.isChecked = checked
+            binding.sDayornight.isChecked = checked
             switchTheme(it)
         }
     }
