@@ -6,15 +6,17 @@ import com.example.playlistmaker.search.domain.api.TracksRepository
 import com.example.playlistmaker.search.domain.models.ResponseStatus
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.TrackResults
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
 
-    override fun searchTracks(expression: String): TrackResults {
+    override fun searchTracks(expression: String): Flow<TrackResults> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
-        return if (response.resultCode == 200) {
-            TrackResults(
+        if (response.resultCode == 200) {
+            emit(TrackResults(
                 status = if ((response as TrackResponse).results.isEmpty()) {
                     ResponseStatus.EMPTY
                 } else {
@@ -35,10 +37,11 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TracksRepo
                     )
                 }
             )
-        } else {
-            TrackResults(
-                status = ResponseStatus.ERROR
             )
+        } else {
+            emit(TrackResults(
+                status = ResponseStatus.ERROR
+            ))
         }
     }
 

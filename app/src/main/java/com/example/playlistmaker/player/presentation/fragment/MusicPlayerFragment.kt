@@ -46,9 +46,9 @@ class MusicPlayerFragment : Fragment() {
 
         viewModel.playerState.observe(viewLifecycleOwner) {playerState ->
             if (playerState == PlayerState.PREPARED || playerState == PlayerState.PAUSED) {
-                binding.playMusicB.setIconResource(R.drawable.pause_ic)
-            } else {
                 binding.playMusicB.setIconResource(R.drawable.ic_play)
+            } else {
+                binding.playMusicB.setIconResource(R.drawable.pause_ic)
             }
         }
 
@@ -95,9 +95,9 @@ class MusicPlayerFragment : Fragment() {
     }
 
     private fun prepareMedia(){
-        viewModel.setPlayerPosition()
-        viewModel.startTimerMusic()
         viewModel.playbackControl()
+        viewModel.startTimerMusic()
+        viewModel.setPlayerPosition()
     }
 
     override fun onPause() {

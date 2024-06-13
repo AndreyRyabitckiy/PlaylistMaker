@@ -18,6 +18,7 @@ import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.models.ResponseStatus
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.presentation.view_model.SearchFragmentViewModel
+import com.example.playlistmaker.ui.root.RootActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -52,7 +53,9 @@ class SearchFragment : Fragment() {
                 binding.tvHistorySearch.isVisible = answer
         }
 
-        adapter.onClick = { item -> onClickAdapter(item) }
+        adapter.onClick = { item ->
+            (activity as RootActivity).animateBottomNavigationViewFalse()
+            onClickAdapter(item) }
 
         binding.run {
             rwTrack.adapter = adapter
@@ -93,10 +96,11 @@ class SearchFragment : Fragment() {
     }
 
     private fun onClickAdapter(track: Track) {
+
         if (debounceClick) {
             debounceClick = false
-            viewModel.writeHistory(track)
             viewModel.clickDebounce()
+            viewModel.writeHistory(track)
             findNavController().navigate(
                 R.id.action_searchFragment_to_musicPlayerFragment,
                 bundleOf(TRACK_KEY to track)
@@ -153,7 +157,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun etTextChangedWatcher(s: CharSequence?) {
-        viewModel
         binding.run {
             ivClearIcon.isVisible = !s.isNullOrEmpty()
             s?.let {
@@ -202,6 +205,7 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        (activity as RootActivity).animateBottomNavigationViewTrue()
         viewModel.resume()
     }
 

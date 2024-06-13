@@ -2,6 +2,7 @@ package com.example.playlistmaker.ui.root
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
@@ -21,5 +22,14 @@ class RootActivity : AppCompatActivity() {
 
         val bottomNavigationMenu =
             binding.bottomNavigationView.setupWithNavController(navController)
+
+    }
+
+    fun animateBottomNavigationViewTrue() {
+        binding.bottomNavigationView.isVisible = true
+    }
+
+    fun animateBottomNavigationViewFalse() {
+        binding.bottomNavigationView.isVisible = false
     }
 }
