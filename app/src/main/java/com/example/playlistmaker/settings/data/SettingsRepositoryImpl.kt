@@ -16,13 +16,13 @@ class SettingsRepositoryImpl(private val context: Context) : SettingsRepository 
         sharedPrefs.edit().putInt(THEME_KEY, theme).apply()
 
 
-    override fun getAppShareLink() = context.getString(R.string.shareHT)
+    override fun getAppShareLink() = context.getString(R.string.share_ht)
 
-    override fun getUserPolicy() = context.getString(R.string.userPolicWeb)
+    override fun getUserPolicy() = context.getString(R.string.user_polic_web)
 
     override fun getSupportEmail() = context.getString(R.string.email)
-    override fun getSupportEmailTop() = context.getString(R.string.emailSubject)
-    override fun getSupportEmailText() = context.getString(R.string.emailText)
+    override fun getSupportEmailTop() = context.getString(R.string.email_subject)
+    override fun getSupportEmailText() = context.getString(R.string.email_text)
 
 
     companion object {

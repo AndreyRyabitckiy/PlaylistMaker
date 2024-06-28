@@ -7,7 +7,8 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.TypedValue
 
-const val RADIUS_CUT_IMAGE = 10f
+const val RADIUS_CUT_IMAGE_ADAPTER = 2f
+const val RADIUS_CUT_IMAGE_PLAYER = 8f
 inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
     SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getParcelable(key, T::class.java)
     else -> @Suppress("DEPRECATION") getParcelable(key) as? T

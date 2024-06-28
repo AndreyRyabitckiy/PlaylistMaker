@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blackOrWhite"
     android:orientation="vertical"
-    tools:ignore="MissingDefaultResource"
-    tools:context=".settings.presentation.fragment.SettingsFragment">
+    tools:context=".settings.presentation.fragment.SettingsFragment"
+    tools:ignore="MissingDefaultResource">
 
     <LinearLayout
         style="@style/LinearSettings"
@@ -25,14 +24,14 @@
 
         <TextView
             style="@style/ButtonSettings"
-            android:text="@string/Dark" />
+            android:text="@string/dark" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/sDayornight"
+            android:id="@+id/sDayOrNight"
             style="@style/Checker"
-            android:layout_width = "wrap_content"
-            android:layout_gravity = "center_vertical"
-            android:layout_height= "wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/o_8dp" />
 
     </LinearLayout>
@@ -55,14 +54,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSendSuport"
+        android:id="@+id/llSendSupport"
         style="@style/LinearSettings"
         tools:ignore="UseCompoundDrawables">
 
 
         <TextView
             style="@style/ButtonSettings"
-            android:text="@string/sourcesend"
+            android:text="@string/source_send"
             tools:ignore="InefficientWeight,NestedWeights" />
 
         <ImageView
@@ -73,14 +72,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llUserPolic"
+        android:id="@+id/llUserPolicy"
         style="@style/LinearSettings"
         tools:ignore="UseCompoundDrawables">
 
 
         <TextView
             style="@style/ButtonSettings"
-            android:text="@string/userPolic"
+            android:text="@string/user_policy"
             tools:ignore="Nestea" />
 
         <ImageView

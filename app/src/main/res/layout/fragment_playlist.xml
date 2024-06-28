@@ -19,12 +19,20 @@
         android:textSize="@dimen/o_14sp"
         app:tint="@color/BlWh" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/o_0dp"
+        android:layout_weight="1" />
+
     <FrameLayout
+        android:id="@+id/flPlaceHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"
         android:layout_marginTop="@dimen/o_48dp"
-        android:foregroundGravity="center">
+        android:foregroundGravity="center"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -36,19 +44,20 @@
             android:id="@+id/ivSunOrWiFi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginStart="@dimen/o_28dp"
+            android:layout_marginTop="@dimen/o_26dp"
             android:src="@drawable/sun_ic" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="72dp"
+            android:layout_marginStart="@dimen/o_72dp"
             android:src="@drawable/com1_ic"
             app:tint="@color/BlWh" />
     </FrameLayout>
 
     <TextView
+        android:id="@+id/tvPlaceHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -57,5 +66,6 @@
         android:gravity="center"
         android:text="@string/no_playlist"
         android:textColor="@color/whiteOrBlack"
-        android:textSize="@dimen/o_19sp" />
+        android:textSize="@dimen/o_19sp"
+        android:visibility="gone" />
 </LinearLayout>

@@ -34,15 +34,15 @@ class SettingsFragment:Fragment() {
                 viewModel.shareApp()
             }
 
-            llSendSuport.setOnClickListener {
+            llSendSupport.setOnClickListener {
                 viewModel.sendToSupport()
             }
 
-            llUserPolic.setOnClickListener {
+            llUserPolicy.setOnClickListener {
                 viewModel.userPolicy()
             }
 
-            sDayornight.setOnCheckedChangeListener { _, checked ->
+            sDayOrNight.setOnCheckedChangeListener { _, checked ->
                 val theme = if (checked) {
                     AppCompatDelegate.MODE_NIGHT_YES
                 } else {
@@ -59,7 +59,7 @@ class SettingsFragment:Fragment() {
                 it == AppCompatDelegate.MODE_NIGHT_YES
             }
 
-            binding.sDayornight.isChecked = checked
+            binding.sDayOrNight.isChecked = checked
             switchTheme(it)
         }
     }
@@ -69,7 +69,6 @@ class SettingsFragment:Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
     private fun getSystemNightMode() = resources
         ?.configuration
         ?.uiMode

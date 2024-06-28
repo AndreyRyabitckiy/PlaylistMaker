@@ -1,28 +1,31 @@
 package com.example.playlistmaker.player.presentation.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.app.RADIUS_CUT_IMAGE
+import com.example.playlistmaker.app.RADIUS_CUT_IMAGE_PLAYER
 import com.example.playlistmaker.app.dpToPx
 import com.example.playlistmaker.app.parcelable
+import com.example.playlistmaker.app.showCustomToast
 import com.example.playlistmaker.databinding.FragmentMusicPlayerBinding
 import com.example.playlistmaker.player.presentation.view_model.MusicPlayerViewModel
 import com.example.playlistmaker.player.presentation.view_model.PlayerState
 import com.example.playlistmaker.search.domain.models.Track
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class MusicPlayerFragment : Fragment() {
 
+    private val adapter by lazy { BottomSheetPlayListAdapter() }
     private var _binding: FragmentMusicPlayerBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MusicPlayerViewModel by viewModel<MusicPlayerViewModel> {
@@ -31,7 +34,6 @@ class MusicPlayerFragment : Fragment() {
         )
     }
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,23 +51,50 @@ class MusicPlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.playerState.observe(viewLifecycleOwner) { playerState ->
-            if (playerState == PlayerState.PREPARED || playerState == PlayerState.PAUSED) {
-                binding.playMusicB.setIconResource(R.drawable.ic_play)
-            } else {
-                binding.playMusicB.setIconResource(R.drawable.pause_ic)
-            }
+        viewModel.trackInPlayList.observe(viewLifecycleOwner) { toastState ->
+            makeToast(toastState.answer, toastState.name)
         }
 
-        viewModel.isLiked.observe(viewLifecycleOwner) { isLiked ->
-            if (isLiked) {
-                binding.likeMusicB.setIconResource(R.drawable.like_ic_red)
-                binding.likeMusicB.setIconTintResource(R.color.red_like)
-            } else {
-                binding.likeMusicB.setIconResource(R.drawable.like_ic)
-                binding.likeMusicB.setIconTintResource(R.color.white)
-            }
+        binding.recyclerViewBS.adapter = adapter
+
+        viewModel.playLists.observe(viewLifecycleOwner) {
+            adapter.data = it
         }
+
+        binding.bsbtNewPlaylist.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_musicPlayerFragment_to_createPlayList
+            )
+        }
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                stateBottomSheet(newState)
+            }
+
+            override fun onSlide(p0: View, p1: Float) {}
+        })
+
+        adapter.onClick = { playList ->
+            viewModel.insertInPlayList(playList.id, playList.namePlayList)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            viewModel.update()
+        }
+
+        binding.playlistAddB.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        viewModel.playerState.observe(viewLifecycleOwner) { playerState ->
+            playerState(playerState)
+        }
+
+        viewModel.isLiked.observe(viewLifecycleOwner) { isLiked -> isLike(isLiked) }
 
         binding.likeMusicB.setOnClickListener {
             viewModel.changeLikedStatus()
@@ -75,13 +104,49 @@ class MusicPlayerFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        binding.playMusicB.setOnClickListener {
-            prepareMedia()
-        }
+        binding.playMusicB.setOnClickListener { prepareMedia() }
 
         viewModel.timerLiveData.observe(viewLifecycleOwner) { time ->
             binding.timeMusic30Tv.text = time
             viewModel.setPlayerPosition()
+        }
+    }
+
+    private fun makeToast(answer: Boolean, name: String) {
+        if (answer) {
+            Toast(requireContext()).showCustomToast("Добавлено в плейлист $name", requireActivity())
+        } else {
+            Toast(requireContext()).showCustomToast("Трек уже добавлен в плейлист $name", requireActivity())
+        }
+    }
+
+    private fun playerState(playerState: PlayerState) {
+        if (playerState == PlayerState.PREPARED || playerState == PlayerState.PAUSED) {
+            binding.playMusicB.setIconResource(R.drawable.ic_play)
+        } else {
+            binding.playMusicB.setIconResource(R.drawable.pause_ic)
+        }
+    }
+
+    private fun isLike(answer: Boolean) {
+        if (answer) {
+            binding.likeMusicB.setIconResource(R.drawable.like_ic_red)
+            binding.likeMusicB.setIconTintResource(R.color.red_like)
+        } else {
+            binding.likeMusicB.setIconResource(R.drawable.like_ic)
+            binding.likeMusicB.setIconTintResource(R.color.white)
+        }
+    }
+
+    private fun stateBottomSheet(newState: Int) {
+        when (newState) {
+            BottomSheetBehavior.STATE_HIDDEN -> {
+                binding.overlay.visibility = View.GONE
+            }
+
+            else -> {
+                binding.overlay.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -106,7 +171,7 @@ class MusicPlayerFragment : Fragment() {
                     .load(urlImage)
                     .placeholder(R.drawable.placeholder_ic)
                     .centerInside()
-                    .transform(RoundedCorners(dpToPx(RADIUS_CUT_IMAGE, requireContext())))
+                    .transform(RoundedCorners(dpToPx(RADIUS_CUT_IMAGE_PLAYER, requireContext())))
                     .into(musicImageIv)
 
                 viewModel.preparePlayer(track.previewUrl.toString())
@@ -123,6 +188,11 @@ class MusicPlayerFragment : Fragment() {
     override fun onPause() {
         viewModel.pausePlayer()
         super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.update()
     }
 
     override fun onDestroy() {
