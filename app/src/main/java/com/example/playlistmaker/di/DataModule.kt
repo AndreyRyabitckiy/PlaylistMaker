@@ -1,6 +1,8 @@
 package com.example.playlistmaker.di
 
 import android.content.Context
+import androidx.room.Room
+import com.example.playlistmaker.db.data.AppDatabase
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.SearchHistoryStorage
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
@@ -20,6 +22,11 @@ val dataModule = module {
         SearchHistoryStorageImpl(get(), get())
     }
 
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
+    }
+
     single<NetworkClient> {
         RetrofitNetworkClient(get())
     }
@@ -37,9 +44,9 @@ val dataModule = module {
     }
 }
 
-private val BASE_URL = "https://itunes.apple.com"
+private const val BASE_URL = "https://itunes.apple.com"
 private fun provideITunesApi(builder: Retrofit) =
-    builder.create(com.example.playlistmaker.search.data.network.iTunesApi::class.java)
+    builder.create(com.example.playlistmaker.search.data.network.ITunesApi::class.java)
 
 private fun provideRetrofit(baseUrl: String, okHttpClient: OkHttpClient) = Retrofit.Builder()
     .baseUrl(baseUrl)

@@ -19,12 +19,17 @@ import com.example.playlistmaker.player.presentation.view_model.MusicPlayerViewM
 import com.example.playlistmaker.player.presentation.view_model.PlayerState
 import com.example.playlistmaker.search.domain.models.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MusicPlayerFragment : Fragment() {
 
     private var _binding: FragmentMusicPlayerBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MusicPlayerViewModel by viewModel<MusicPlayerViewModel>()
+    private val viewModel: MusicPlayerViewModel by viewModel<MusicPlayerViewModel> {
+        parametersOf(
+            requireArguments().parcelable<Track>(TRACK_KEY)
+        )
+    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -32,7 +37,7 @@ class MusicPlayerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMusicPlayerBinding.inflate(inflater,container,false)
+        _binding = FragmentMusicPlayerBinding.inflate(inflater, container, false)
 
         if (arguments != null) {
             trackItemUse()
@@ -44,12 +49,26 @@ class MusicPlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.playerState.observe(viewLifecycleOwner) {playerState ->
+        viewModel.playerState.observe(viewLifecycleOwner) { playerState ->
             if (playerState == PlayerState.PREPARED || playerState == PlayerState.PAUSED) {
                 binding.playMusicB.setIconResource(R.drawable.ic_play)
             } else {
                 binding.playMusicB.setIconResource(R.drawable.pause_ic)
             }
+        }
+
+        viewModel.isLiked.observe(viewLifecycleOwner) { isLiked ->
+            if (isLiked) {
+                binding.likeMusicB.setIconResource(R.drawable.like_ic_red)
+                binding.likeMusicB.setIconTintResource(R.color.red_like)
+            } else {
+                binding.likeMusicB.setIconResource(R.drawable.like_ic)
+                binding.likeMusicB.setIconTintResource(R.color.white)
+            }
+        }
+
+        binding.likeMusicB.setOnClickListener {
+            viewModel.changeLikedStatus()
         }
 
         binding.backIv.setOnClickListener {
@@ -60,15 +79,16 @@ class MusicPlayerFragment : Fragment() {
             prepareMedia()
         }
 
-        viewModel.timerLiveData.observe(viewLifecycleOwner) {time ->
+        viewModel.timerLiveData.observe(viewLifecycleOwner) { time ->
             binding.timeMusic30Tv.text = time
             viewModel.setPlayerPosition()
         }
     }
 
-    private fun trackItemUse(){
+    private fun trackItemUse() {
         binding.run {
             requireArguments().parcelable<Track>(TRACK_KEY)?.let { track ->
+                viewModel.getLikeStatus(track.trackId)
                 nameMusicTv.text = track.trackName
                 groupNameTv.text = track.artistName
                 timeMusicAnswerTv.text = track.trackTimeMillis
@@ -94,7 +114,7 @@ class MusicPlayerFragment : Fragment() {
         }
     }
 
-    private fun prepareMedia(){
+    private fun prepareMedia() {
         viewModel.playbackControl()
         viewModel.startTimerMusic()
         viewModel.setPlayerPosition()

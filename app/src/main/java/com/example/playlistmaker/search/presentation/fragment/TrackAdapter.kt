@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackItemBinding
 import com.example.playlistmaker.search.domain.models.Track
-import java.util.ArrayList
 
 class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 

@@ -25,7 +25,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchFragmentViewModel by viewModel()
-    val adapter by lazy { TrackAdapter() }
+    private val adapter by lazy { TrackAdapter() }
     private var debounceClick = true
 
 

@@ -1,16 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical">
 
     <FrameLayout
+        android:id="@+id/flViewHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"
         android:layout_marginTop="@dimen/o_104dp"
-        android:foregroundGravity="center">
+        android:foregroundGravity="center"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,6 +38,7 @@
     </FrameLayout>
 
     <TextView
+        android:id="@+id/tvViewHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -42,5 +46,17 @@
         android:fontFamily="@font/ys_display_medium"
         android:text="@string/no_mediateka"
         android:textColor="@color/whiteOrBlack"
-        android:textSize="@dimen/o_19sp" />
+        android:textSize="@dimen/o_19sp"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rwTrackLiked"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/o_16dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/track_item" />
 </LinearLayout>

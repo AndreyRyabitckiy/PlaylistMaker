@@ -1,11 +1,17 @@
 package com.example.playlistmaker.search.data
 
+import com.example.playlistmaker.db.data.AppDatabase
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.sharedprefs.SharedPrefsRepository
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
-class SharedPrefsRepositoryImpl(private val storage: SearchHistoryStorage) : SharedPrefsRepository {
-    override fun saveReadClear(
+class SharedPrefsRepositoryImpl(
+    private val storage: SearchHistoryStorage,
+    private val appDatabase: AppDatabase
+) : SharedPrefsRepository {
+    override suspend fun saveReadClear(
         use: String,
         track: Track?
     ): ArrayList<Track> {
@@ -22,7 +28,11 @@ class SharedPrefsRepositoryImpl(private val storage: SearchHistoryStorage) : Sha
         return answer
     }
 
-    private fun trackDtoToTrack(list:ArrayList<TrackDto>):ArrayList<Track>{
+    private fun trackDtoToTrack(list: ArrayList<TrackDto>): ArrayList<Track> {
+        val listTrackId = ArrayList<String>()
+        MainScope().launch {
+            listTrackId.addAll(appDatabase.trackDao().getTracksIdList())
+        }
         val answer = list.map {
             Track(
                 trackName = it.trackName,
@@ -34,13 +44,25 @@ class SharedPrefsRepositoryImpl(private val storage: SearchHistoryStorage) : Sha
                 releaseDate = it.releaseDate,
                 primaryGenreName = it.primaryGenreName,
                 country = it.country,
-                previewUrl = it.previewUrl
+                previewUrl = it.previewUrl,
+                isLiked = isFavoriteBoolean(it.trackId, listTrackId)
             )
         }
         return answer.toCollection(ArrayList())
     }
 
-    companion object{
+    private fun isFavoriteBoolean(trackId: String, list: List<String>): Boolean {
+        var answer = false
+
+        list.forEach { likedTrack ->
+            if (likedTrack == trackId) {
+                answer = true
+            }
+        }
+        return answer
+    }
+
+    companion object {
         private const val USE_CLEAR = "clear"
         private const val USE_READ = "read"
         private const val USE_WRITE = "write"

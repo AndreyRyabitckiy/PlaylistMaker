@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.lang.Exception
 
-class RetrofitNetworkClient(private val iTunesApi: iTunesApi) : NetworkClient {
+class RetrofitNetworkClient(private val iTunesApi: ITunesApi) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
         return withContext(Dispatchers.IO) {
