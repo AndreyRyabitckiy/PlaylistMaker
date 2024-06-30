@@ -88,18 +88,23 @@ class MusicPlayerViewModel(
         timerJob?.cancel()
     }
 
-    fun preparePlayer(url: String) {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            mediaPlayerState = PlayerState.PREPARED
-        }
+    var playePrepare = false
 
-        mediaPlayer.setOnCompletionListener {
-            _timerLiveData.postValue(TIME_START)
-            mediaPlayerState = PlayerState.PREPARED
-            _playerState.postValue(mediaPlayerState)
-            timerJob?.cancel()
+    fun preparePlayer() {
+        if (!playePrepare) {
+            mediaPlayer.setDataSource(track.previewUrl.toString())
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                mediaPlayerState = PlayerState.PREPARED
+            }
+
+            mediaPlayer.setOnCompletionListener {
+                _timerLiveData.postValue(TIME_START)
+                mediaPlayerState = PlayerState.PREPARED
+                _playerState.postValue(mediaPlayerState)
+                timerJob?.cancel()
+            }
+            playePrepare = true
         }
     }
 
@@ -111,9 +116,11 @@ class MusicPlayerViewModel(
     }
 
     fun pausePlayer() {
-        mediaPlayer.pause()
-        mediaPlayerState = PlayerState.PAUSED
-        _playerState.postValue(mediaPlayerState)
+        if (mediaPlayerState != PlayerState.PREPARED){
+            mediaPlayer.pause()
+            mediaPlayerState = PlayerState.PAUSED
+            _playerState.postValue(mediaPlayerState)
+        }
     }
 
     fun mediaPlayerRelease() {

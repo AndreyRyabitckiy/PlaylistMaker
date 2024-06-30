@@ -2,8 +2,6 @@ package com.example.playlistmaker.playlist_create.presentation.fragment
 
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +10,9 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.app.showCustomToast
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.playlist_create.presentation.view_model.CreatePlayListFragmentViewModel
@@ -49,6 +49,8 @@ class CreatePlayListFragment : Fragment() {
             pickVisualMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         binding.bCreate.isEnabled = false
+        binding.etNamePlayList.isActivated = false
+        binding.etAboutPlayList.isActivated =false
 
         confirmDialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("Завершить создание плейлиста?")
@@ -62,31 +64,34 @@ class CreatePlayListFragment : Fragment() {
             }
         })
 
-        val namePlayListTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-                //empty
+        binding.etNamePlayList.doOnTextChanged { text, start, before, count ->
+            if (binding.etNamePlayList.text.isNotBlank()) {
+                binding.bCreate.isEnabled = true
+            } else {
+                binding.bCreate.isEnabled = false
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (binding.etNamePlayList.text.isNotBlank()) {
-                    binding.bCreate.isEnabled = true
-                } else {
-                    binding.bCreate.isEnabled = false
-                }
+            if (binding.etNamePlayList.text.isNotEmpty()) {
+                binding.etNamePlayList.isActivated = true
+            } else {
+                binding.etNamePlayList.isActivated = false
             }
+        }
 
-            override fun afterTextChanged(s: Editable?) {
-                //empty
+        binding.etAboutPlayList.doOnTextChanged { text, start, before, count ->
+            if (binding.etAboutPlayList.text.isNotEmpty()) {
+                binding.etAboutPlayList.isActivated = true
+            } else {
+                binding.etAboutPlayList.isActivated = false
             }
         }
 
         binding.bCreate.setOnClickListener {
-            Toast(requireContext()).showCustomToast("Плейлист ${binding.etNamePlayList.text} создан", requireActivity())
+            Toast(requireContext()).showCustomToast(
+                getString(
+                    R.string.playlist_create,
+                    binding.etNamePlayList.text
+                ), requireActivity())
             viewModel.createNewPlayList(
                 binding.etNamePlayList.text.toString(),
                 binding.etAboutPlayList.text.toString(),
@@ -97,7 +102,6 @@ class CreatePlayListFragment : Fragment() {
 
         viewModel.nameImage
 
-        binding.etNamePlayList.addTextChangedListener(namePlayListTextWatcher)
         binding.backIv.setOnClickListener {
             exitToView()
         }

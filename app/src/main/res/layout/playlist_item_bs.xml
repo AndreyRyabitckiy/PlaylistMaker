@@ -11,6 +11,8 @@
 
     <ImageView
         android:id="@+id/ivImageBS"
+        android:background="@drawable/adapter_view"
+        android:clipToOutline="true"
         android:layout_width="@dimen/o_48dp"
         android:layout_height="@dimen/o_48dp"
         android:layout_gravity="center"

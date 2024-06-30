@@ -35,7 +35,7 @@ class CreatePlayListFragmentViewModel(
     fun saveImageToFile(uri: Uri?): String {
         var road: String = ""
         if (uri != null) {
-            runBlocking { road = saveImageInteractor.saveImageToFile(uri) }
+            runBlocking { road = saveImageInteractor.saveImageToFile(uri.toString()) }
         }
         return road
     }

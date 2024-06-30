@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -51,6 +52,18 @@ class MusicPlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
+            }
+        })
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        viewModel.preparePlayer()
+
         viewModel.trackInPlayList.observe(viewLifecycleOwner) { toastState ->
             makeToast(toastState.answer, toastState.name)
         }
@@ -62,13 +75,10 @@ class MusicPlayerFragment : Fragment() {
         }
 
         binding.bsbtNewPlaylist.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             findNavController().navigate(
                 R.id.action_musicPlayerFragment_to_createPlayList
             )
-        }
-
-        val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet).apply {
-            state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         bottomSheetBehavior.addBottomSheetCallback(object :
@@ -82,7 +92,6 @@ class MusicPlayerFragment : Fragment() {
 
         adapter.onClick = { playList ->
             viewModel.insertInPlayList(playList.id, playList.namePlayList)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             viewModel.update()
         }
 
@@ -114,9 +123,9 @@ class MusicPlayerFragment : Fragment() {
 
     private fun makeToast(answer: Boolean, name: String) {
         if (answer) {
-            Toast(requireContext()).showCustomToast("Добавлено в плейлист $name", requireActivity())
+            Toast(requireContext()).showCustomToast(getString(R.string.add_playlist_yes, name), requireActivity())
         } else {
-            Toast(requireContext()).showCustomToast("Трек уже добавлен в плейлист $name", requireActivity())
+            Toast(requireContext()).showCustomToast(getString(R.string.add_playlist_no, name), requireActivity())
         }
     }
 
@@ -142,9 +151,7 @@ class MusicPlayerFragment : Fragment() {
         when (newState) {
             BottomSheetBehavior.STATE_HIDDEN -> {
                 binding.overlay.visibility = View.GONE
-            }
-
-            else -> {
+            } else -> {
                 binding.overlay.visibility = View.VISIBLE
             }
         }
@@ -174,7 +181,7 @@ class MusicPlayerFragment : Fragment() {
                     .transform(RoundedCorners(dpToPx(RADIUS_CUT_IMAGE_PLAYER, requireContext())))
                     .into(musicImageIv)
 
-                viewModel.preparePlayer(track.previewUrl.toString())
+
             }
         }
     }
@@ -192,6 +199,9 @@ class MusicPlayerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        BottomSheetBehavior.from(binding.standardBottomSheet).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
         viewModel.update()
     }
 

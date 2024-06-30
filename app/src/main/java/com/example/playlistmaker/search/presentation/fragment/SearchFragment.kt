@@ -89,6 +89,7 @@ class SearchFragment : Fragment() {
             etSearchText.addTextChangedListener(simpleTextWatcher)
             ivClearIcon.setOnClickListener { clearTextButtonUse() }
             btResearch.setOnClickListener { sendToServer() }
+
             etSearchText.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     sendToServer()

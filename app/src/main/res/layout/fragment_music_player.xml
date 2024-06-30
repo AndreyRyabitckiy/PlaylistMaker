@@ -84,7 +84,7 @@
             style="@style/ButtonPlayer"
             android:layout_width="@dimen/o_50dp"
             android:layout_height="@dimen/o_50dp"
-            android:backgroundTint="@color/grey"
+            android:backgroundTint="@color/player_button"
             app:cornerRadius="@dimen/o_26dp"
             app:icon="@drawable/like_ic"
             app:layout_constraintBaseline_toBaselineOf="@id/playMusicB"
@@ -111,7 +111,7 @@
             android:layout_width="@dimen/o_50dp"
             android:layout_height="@dimen/o_50dp"
             android:layout_marginBottom="@dimen/o_20dp"
-            android:backgroundTint="@color/grey"
+            android:backgroundTint="@color/player_button"
             app:cornerRadius="@dimen/o_26dp"
             app:icon="@drawable/ic_add_library"
             app:iconTint="@color/white"
@@ -250,8 +250,8 @@
         android:background="@color/blackOrWhite"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/o_16dp"
-        app:behavior_hideable="true"
         app:behavior_peekHeight="@dimen/o_240dp"
+        app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
