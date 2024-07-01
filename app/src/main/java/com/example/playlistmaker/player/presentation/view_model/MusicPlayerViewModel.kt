@@ -13,6 +13,8 @@ import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -157,15 +159,13 @@ class MusicPlayerViewModel(
         }
     }
 
-
-    private var _trackInPlayList = MutableLiveData<ToastState>()
-    val trackInPlayList: LiveData<ToastState>
-        get() = _trackInPlayList
+    private var _trackAddedFlow = MutableSharedFlow<ToastState>()
+    val trackAddedFlow = _trackAddedFlow.asSharedFlow()
 
     fun insertInPlayList(id: Long, namePlayList:String) {
         viewModelScope.launch {
             val trackAdded = playListInteractor.updatePlayList(track, id)
-            _trackInPlayList.postValue(ToastState(trackAdded, namePlayList))
+            _trackAddedFlow.emit(ToastState(trackAdded, namePlayList))
             update()
         }
     }

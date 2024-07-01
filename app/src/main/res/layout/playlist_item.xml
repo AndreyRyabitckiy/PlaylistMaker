@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:layout_marginTop="@dimen/o_4dp"
             android:id="@+id/tvNamePlaylist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

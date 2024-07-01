@@ -58,7 +58,7 @@ class CreatePlayListFragment : Fragment() {
             .setNeutralButton("Отмена") { dialog, which -> }
             .setPositiveButton("Завершить") { dialog, which -> findNavController().popBackStack() }
 
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 exitToView()
             }
@@ -108,15 +108,15 @@ class CreatePlayListFragment : Fragment() {
     }
 
     private fun exitToView() {
-        if (binding.etAboutPlayList.text.isNotEmpty() || binding.etNamePlayList.text.isNotEmpty() || binding.imageInsert.drawable != null) {
+        if (!binding.etAboutPlayList.text.isNullOrEmpty() || !binding.etNamePlayList.text.isNullOrEmpty() || binding.imageInsert.drawable != null) {
             confirmDialog.show()
         } else {
             findNavController().popBackStack()
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 
