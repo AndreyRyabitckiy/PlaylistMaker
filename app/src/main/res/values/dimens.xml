@@ -36,4 +36,15 @@
     <dimen name="o_28dp">28dp</dimen>
     <dimen name="o_13sp">13sp</dimen>
     <dimen name="size_cursor">2dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="o_172dp">172dp</dimen>
+    <dimen name="o_12sp">12sp</dimen>
+    <dimen name="o_20sp">20sp</dimen>
+    <dimen name="o_100dp">100dp</dimen>
+    <dimen name="o_200dp">200dp</dimen>
+    <dimen name="o_2dp">2dp</dimen>
+    <dimen name="o_5dp">5dp</dimen>
+    <dimen name="o_42dp">42dp</dimen>
+    <dimen name="o_72dp">72dp</dimen>
+    <dimen name="o_240dp">240dp</dimen>
 </resources>

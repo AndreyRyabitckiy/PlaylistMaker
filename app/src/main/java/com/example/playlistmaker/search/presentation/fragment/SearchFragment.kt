@@ -43,19 +43,20 @@ class SearchFragment : Fragment() {
         viewModel.tracks.observe(viewLifecycleOwner) {
             adapter.data = it
         }
-        viewModel.isClickAllowed.observe(viewLifecycleOwner){
+        viewModel.isClickAllowed.observe(viewLifecycleOwner) {
             debounceClick = it
         }
 
         viewModel.searchStatus.observe(viewLifecycleOwner) { tracksListChanged(it) }
-        viewModel.showHistory.observe(viewLifecycleOwner) { answer->
-                binding.bClearHistorySearch.isVisible = answer
-                binding.tvHistorySearch.isVisible = answer
+        viewModel.showHistory.observe(viewLifecycleOwner) { answer ->
+            binding.bClearHistorySearch.isVisible = answer
+            binding.tvHistorySearch.isVisible = answer
         }
 
         adapter.onClick = { item ->
             (activity as RootActivity).animateBottomNavigationViewFalse()
-            onClickAdapter(item) }
+            onClickAdapter(item)
+        }
 
         binding.run {
             rwTrack.adapter = adapter
@@ -75,9 +76,11 @@ class SearchFragment : Fragment() {
                 ) {
 
                 }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     etTextChangedWatcher(s)
                 }
+
                 override fun afterTextChanged(s: Editable?) {
                     //empty
                 }
@@ -85,7 +88,8 @@ class SearchFragment : Fragment() {
 
             etSearchText.addTextChangedListener(simpleTextWatcher)
             ivClearIcon.setOnClickListener { clearTextButtonUse() }
-            btReserch.setOnClickListener { sendToServer() }
+            btResearch.setOnClickListener { sendToServer() }
+
             etSearchText.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     sendToServer()
@@ -122,7 +126,7 @@ class SearchFragment : Fragment() {
                     showHolder(true)
                     ivSunOrWiFi.setImageResource(R.drawable.sun_ic)
                     tvTextHolder.setText(R.string.nothing)
-                    btReserch.isVisible = false
+                    btResearch.isVisible = false
                 }
 
                 ResponseStatus.LOADING -> {
@@ -133,8 +137,8 @@ class SearchFragment : Fragment() {
                     progressBar.isVisible = false
                     showHolder(true)
                     ivSunOrWiFi.setImageResource(R.drawable.nointernet_ic)
-                    tvTextHolder.setText(R.string.Wrong)
-                    btReserch.isVisible = true
+                    tvTextHolder.setText(R.string.wrong)
+                    btResearch.isVisible = true
                 }
             }
         }
@@ -193,7 +197,7 @@ class SearchFragment : Fragment() {
         if (etSearchText.text.isNotBlank()) {
             viewModel.searchTracks(etSearchText.text.toString())
             showHolder(false)
-            btReserch.isVisible = false
+            btResearch.isVisible = false
             progressBar.isVisible = true
         }
     }

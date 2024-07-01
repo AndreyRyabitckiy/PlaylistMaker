@@ -16,4 +16,6 @@
     <color name="greyButton">#40AEAFB4</color>
     <color name="blue_nav">#3772E7</color>
     <color name="red_like">#F56B6C</color>
+    <color name="blue_enable">#3772E7</color>
+    <color name="player_button">#c5c6c8</color>
 </resources>

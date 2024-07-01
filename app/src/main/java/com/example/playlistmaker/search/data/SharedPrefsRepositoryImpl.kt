@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class SharedPrefsRepositoryImpl(
     private val storage: SearchHistoryStorage,
-    private val appDatabase: AppDatabase
+    private val likeTrackDatabase: AppDatabase
 ) : SharedPrefsRepository {
     override suspend fun saveReadClear(
         use: String,
@@ -31,7 +31,7 @@ class SharedPrefsRepositoryImpl(
     private fun trackDtoToTrack(list: ArrayList<TrackDto>): ArrayList<Track> {
         val listTrackId = ArrayList<String>()
         MainScope().launch {
-            listTrackId.addAll(appDatabase.trackDao().getTracksIdList())
+            listTrackId.addAll(likeTrackDatabase.trackDao().getTracksIdList())
         }
         val answer = list.map {
             Track(

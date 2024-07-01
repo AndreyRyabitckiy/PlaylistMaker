@@ -25,14 +25,14 @@
             android:id="@+id/ivSunOrWiFi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginStart="@dimen/o_28dp"
+            android:layout_marginTop="@dimen/o_26dp"
             android:src="@drawable/sun_ic" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="72dp"
+            android:layout_marginStart="@dimen/o_72dp"
             android:src="@drawable/com1_ic"
             app:tint="@color/BlWh" />
     </FrameLayout>
@@ -52,7 +52,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rwTrackLiked"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/o_0dp"
         android:layout_marginTop="@dimen/o_16dp"
         android:layout_weight="1"
         android:orientation="vertical"

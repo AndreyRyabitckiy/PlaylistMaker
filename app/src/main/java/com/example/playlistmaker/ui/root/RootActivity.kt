@@ -2,6 +2,7 @@ package com.example.playlistmaker.ui.root
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -22,7 +23,6 @@ class RootActivity : AppCompatActivity() {
 
         val bottomNavigationMenu =
             binding.bottomNavigationView.setupWithNavController(navController)
-
     }
 
     fun animateBottomNavigationViewTrue() {

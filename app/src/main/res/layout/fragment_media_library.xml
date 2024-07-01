@@ -20,7 +20,7 @@
             android:layout_marginBottom="@dimen/o_12dp"
             android:fontFamily="@font/ys_display_medium"
             android:gravity="center"
-            android:text="@string/MediaLibrary"
+            android:text="@string/media_library"
             android:textColor="@color/whiteOrBlack"
             android:textSize="@dimen/o_22sp"
             android:textStyle="bold" />

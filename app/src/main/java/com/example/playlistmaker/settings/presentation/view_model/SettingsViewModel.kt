@@ -17,6 +17,10 @@ class SettingsViewModel(
         get() = _theme
 
 
+    private val _link = MutableLiveData<String>()
+    val link: LiveData<String>
+        get() = _link
+
     init {
         getTheme()
     }
@@ -41,4 +45,9 @@ class SettingsViewModel(
     fun userPolicy() {
         sharingInteractor.openTerms()
     }
+
+    fun getTermsLink() = _link.postValue(
+        sharingInteractor.getTermsLink()
+    )
+
 }

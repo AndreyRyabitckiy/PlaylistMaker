@@ -8,19 +8,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class LikeTrackRepositoryImpl(
-    private val appDatabase: AppDatabase,
+    private val likeTrackDatabase: AppDatabase,
     private val trackDbConvertor: TrackDbConvertor
 ) : LikeTrackRepository {
     override suspend fun addLikeTrack(track: Track) {
-        appDatabase.trackDao().insertTracks(converterIntoEntity(track))
+        likeTrackDatabase.trackDao().insertTracks(converterIntoEntity(track))
     }
 
     override suspend fun deleteLikeTrack(track: Track) {
-        appDatabase.trackDao().deleteTracksEntity(converterIntoEntity(track))
+        likeTrackDatabase.trackDao().deleteTracksEntity(converterIntoEntity(track))
     }
 
     override fun likeTrackList(): Flow<List<Track>> = flow {
-        emit(converterIntoListTrack(appDatabase.trackDao().getLikedTracks()))
+        emit(converterIntoListTrack(likeTrackDatabase.trackDao().getLikedTracks()))
     }
 
     private fun converterIntoListTrack(tracks: List<TrackEntity>): List<Track> {
