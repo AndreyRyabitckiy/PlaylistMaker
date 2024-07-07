@@ -16,6 +16,8 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     var onClick: (Track) -> Unit = {}
 
+    var onClickLong: (Track) -> Unit = {}
+
 
     override fun getItemCount(): Int {
         return data.size
@@ -24,6 +26,10 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(data[position])
         holder.itemView.setOnClickListener { onClick(data[position]) }
+        holder.itemView.setOnLongClickListener {
+            onClickLong(data[position])
+            true
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {

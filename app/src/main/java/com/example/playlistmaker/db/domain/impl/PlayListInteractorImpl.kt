@@ -39,4 +39,46 @@ class PlayListInteractorImpl(private val playListRepository: PlayListRepository)
     override suspend fun getCountTracks(id: Long) =
         playListRepository.getCountTracks(id)
 
+    override fun tracksInPlayList(id: Long): Flow<List<Track>> {
+        return playListRepository.listTrackPlaylist(id)
+    }
+
+    override suspend fun getTimesTracks(id: Long): String {
+        return formatMinutes(playListRepository.getTimesTracks(id).toInt())
+    }
+
+    override suspend fun deleteTrack(id: Long) {
+        playListRepository.deleteTrack(id)
+    }
+
+    override suspend fun deletePlayList(id: Long) {
+        playListRepository.deletePlaylist(id)
+    }
+
+    override suspend fun shareTracks(id: Long) {
+        playListRepository.shareTracks(id)
+    }
+
+    override suspend fun editPlayList(playList: PlayList) {
+        playListRepository.editPlayList(playList)
+    }
+
+    override suspend fun getPlayList(id: Long): PlayList {
+        return playListRepository.getPlayList(id)
+    }
+
+    private fun formatMinutes(numberMinutes: Int): String {
+        if (numberMinutes % 10 == 0) {
+            return "$numberMinutes минут"
+        }
+        if (numberMinutes % 10 == 1 && !(numberMinutes % 100 >= 11 && numberMinutes % 100 <= 19)) {
+            return "$numberMinutes минута"
+        }
+        if (numberMinutes % 10 < 5 && !(numberMinutes % 100 >= 11 && numberMinutes % 100 <= 19)) {
+            return "$numberMinutes минуты"
+        } else {
+            return "$numberMinutes минут"
+        }
+    }
+
 }

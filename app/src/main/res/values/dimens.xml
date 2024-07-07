@@ -47,4 +47,7 @@
     <dimen name="o_42dp">42dp</dimen>
     <dimen name="o_72dp">72dp</dimen>
     <dimen name="o_240dp">240dp</dimen>
+    <dimen name="o_24sp">24sp</dimen>
+    <dimen name="o_300dp">300dp</dimen>
+    <dimen name="o_38dp">38dp</dimen>
 </resources>

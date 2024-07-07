@@ -66,7 +66,7 @@ class MusicPlayerFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.trackAddedFlow.collect { toastState ->
-                if(toastState.answer) {
+                if (toastState.answer) {
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 }
                 makeToast(toastState.answer, toastState.name)
@@ -126,9 +126,15 @@ class MusicPlayerFragment : Fragment() {
 
     private fun makeToast(answer: Boolean, name: String) {
         if (answer) {
-            Toast(requireContext()).showCustomToast(getString(R.string.add_playlist_yes, name), requireActivity())
+            Toast(requireContext()).showCustomToast(
+                getString(R.string.add_playlist_yes, name),
+                requireActivity()
+            )
         } else {
-            Toast(requireContext()).showCustomToast(getString(R.string.add_playlist_no, name), requireActivity())
+            Toast(requireContext()).showCustomToast(
+                getString(R.string.add_playlist_no, name),
+                requireActivity()
+            )
         }
     }
 
@@ -154,7 +160,9 @@ class MusicPlayerFragment : Fragment() {
         when (newState) {
             BottomSheetBehavior.STATE_HIDDEN -> {
                 binding.overlay.visibility = View.GONE
-            } else -> {
+            }
+
+            else -> {
                 binding.overlay.visibility = View.VISIBLE
             }
         }
@@ -183,8 +191,6 @@ class MusicPlayerFragment : Fragment() {
                     .centerInside()
                     .transform(RoundedCorners(dpToPx(RADIUS_CUT_IMAGE_PLAYER, requireContext())))
                     .into(musicImageIv)
-
-
             }
         }
     }

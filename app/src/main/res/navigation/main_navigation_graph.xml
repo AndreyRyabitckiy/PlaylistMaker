@@ -23,6 +23,13 @@
             app:exitAnim="@anim/slide_out_top"
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_aboutPlayListFragment"
+            app:destination="@id/aboutPlayListFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -41,15 +48,7 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.playlistmaker.settings.presentation.fragment.SettingsFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" >
-        <action
-            android:id="@+id/action_settingsFragment_to_webViewFragment"
-            app:destination="@id/webViewFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom"/>
-    </fragment>
+        tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/musicPlayerFragment"
         android:name="com.example.playlistmaker.player.presentation.fragment.MusicPlayerFragment"
@@ -69,7 +68,22 @@
         android:label="fragment_create_play_list"
         tools:layout="@layout/fragment_create_playlist" />
     <fragment
-        android:id="@+id/webViewFragment"
-        android:name="com.example.playlistmaker.webview.presentation.fragment.WebViewFragment"
-        android:label="WebViewFragment" />
+        android:id="@+id/aboutPlayListFragment"
+        android:name="com.example.playlistmaker.about_playlist.presentation.fragment.AboutPlayListFragment"
+        android:label="AboutPlayListFragment" >
+        <action
+            android:id="@+id/action_aboutPlayListFragment_to_musicPlayerFragment"
+            app:destination="@id/musicPlayerFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
+        <action
+            android:id="@+id/action_aboutPlayListFragment_to_createPlayList"
+            app:destination="@id/createPlayList"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
+    </fragment>
 </navigation>

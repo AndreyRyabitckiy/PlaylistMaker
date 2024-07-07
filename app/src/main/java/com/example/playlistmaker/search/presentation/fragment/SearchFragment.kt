@@ -100,7 +100,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun onClickAdapter(track: Track) {
-
         if (debounceClick) {
             debounceClick = false
             viewModel.clickDebounce()
