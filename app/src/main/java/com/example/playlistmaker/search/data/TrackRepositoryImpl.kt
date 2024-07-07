@@ -14,13 +14,13 @@ import java.util.Locale
 
 class TrackRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val appDatabase: AppDatabase
+    private val likeTrackDatabase: AppDatabase
 ) : TracksRepository {
 
     override fun searchTracks(expression: String): Flow<TrackResults> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         if (response.resultCode == 200) {
-            val likedTrackId = appDatabase.trackDao().getTracksIdList()
+            val likedTrackId = likeTrackDatabase.trackDao().getTracksIdList()
             emit(TrackResults(
                 status = if ((response as TrackResponse).results.isEmpty()) {
                     ResponseStatus.EMPTY
@@ -40,7 +40,6 @@ class TrackRepositoryImpl(
                         country = it.country,
                         previewUrl = it.previewUrl,
                         isLiked = isFavoriteBoolean(it.trackId, likedTrackId)
-
                     )
                 }
             )

@@ -7,10 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.db.data.AppDatabase
 import com.example.playlistmaker.db.domain.LikeTrackInteractor
+import com.example.playlistmaker.db.domain.PlayListInteractor
+import com.example.playlistmaker.playlist_create.domain.models.PlayList
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -18,7 +22,8 @@ import java.util.Locale
 class MusicPlayerViewModel(
     private val track: Track,
     private val likeTrackInteractor: LikeTrackInteractor,
-    private val appDatabase: AppDatabase
+    private val likeTrackDatabase: AppDatabase,
+    private val playListInteractor: PlayListInteractor
 ) : ViewModel() {
 
     private val dateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
@@ -42,19 +47,17 @@ class MusicPlayerViewModel(
 
     private var playerPosition: Long = 0L
     fun getLikeStatus(id: String) = viewModelScope.launch(Dispatchers.IO) {
-        val like = appDatabase.trackDao().hasLike(id) > 0
+        val like = likeTrackDatabase.trackDao().hasLike(id) > 0
         _isLiked.postValue(like)
     }
 
     fun changeLikedStatus() {
         val newStatus = _isLiked.value != true
         _isLiked.postValue(newStatus)
-        if (newStatus) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (newStatus) {
                 likeTrackInteractor.addLikeTrack(track)
-            }
-        } else {
-            viewModelScope.launch {
+            } else {
                 likeTrackInteractor.deleteLikeTrack(track)
             }
         }
@@ -87,18 +90,23 @@ class MusicPlayerViewModel(
         timerJob?.cancel()
     }
 
-    fun preparePlayer(url: String) {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            mediaPlayerState = PlayerState.PREPARED
-        }
+    var playePrepare = false
 
-        mediaPlayer.setOnCompletionListener {
-            _timerLiveData.postValue(TIME_START)
-            mediaPlayerState = PlayerState.PREPARED
-            _playerState.postValue(mediaPlayerState)
-            timerJob?.cancel()
+    fun preparePlayer() {
+        if (!playePrepare) {
+            mediaPlayer.setDataSource(track.previewUrl.toString())
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                mediaPlayerState = PlayerState.PREPARED
+            }
+
+            mediaPlayer.setOnCompletionListener {
+                _timerLiveData.postValue(TIME_START)
+                mediaPlayerState = PlayerState.PREPARED
+                _playerState.postValue(mediaPlayerState)
+                timerJob?.cancel()
+            }
+            playePrepare = true
         }
     }
 
@@ -110,9 +118,11 @@ class MusicPlayerViewModel(
     }
 
     fun pausePlayer() {
-        mediaPlayer.pause()
-        mediaPlayerState = PlayerState.PAUSED
-        _playerState.postValue(mediaPlayerState)
+        if (mediaPlayerState != PlayerState.PREPARED){
+            mediaPlayer.pause()
+            mediaPlayerState = PlayerState.PAUSED
+            _playerState.postValue(mediaPlayerState)
+        }
     }
 
     fun mediaPlayerRelease() {
@@ -130,6 +140,33 @@ class MusicPlayerViewModel(
             }
 
             else -> Unit
+        }
+    }
+
+    private val _playList = MutableLiveData<List<PlayList>>()
+    val playLists: LiveData<List<PlayList>>
+        get() = _playList
+
+    fun update() {
+        viewModelScope.launch {
+            playListInteractor.listPlayList().collect {
+                _playList.postValue(
+                    it.map { playlist ->
+                        playlist.copy(count = playListInteractor.getCountTracks(playlist.id))
+                    }
+                )
+            }
+        }
+    }
+
+    private var _trackAddedFlow = MutableSharedFlow<ToastState>()
+    val trackAddedFlow = _trackAddedFlow.asSharedFlow()
+
+    fun insertInPlayList(id: Long, namePlayList:String) {
+        viewModelScope.launch {
+            val trackAdded = playListInteractor.updatePlayList(track, id)
+            _trackAddedFlow.emit(ToastState(trackAdded, namePlayList))
+            update()
         }
     }
 

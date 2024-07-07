@@ -3,6 +3,7 @@ package com.example.playlistmaker.di
 import android.content.Context
 import androidx.room.Room
 import com.example.playlistmaker.db.data.AppDatabase
+import com.example.playlistmaker.playlist_create.data.SaveImageToMemory
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.SearchHistoryStorage
 import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
@@ -24,6 +25,7 @@ val dataModule = module {
 
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
             .build()
     }
 
@@ -35,6 +37,8 @@ val dataModule = module {
     single { provideITunesApi(get()) }
 
     single { provideGson() }
+
+    factory { SaveImageToMemory(androidContext()) }
 
     single {
         androidContext().getSharedPreferences(

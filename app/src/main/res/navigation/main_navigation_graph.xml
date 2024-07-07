@@ -16,6 +16,13 @@
             app:exitAnim="@anim/slide_out_top"
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_createPlayList"
+            app:destination="@id/createPlayList"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -34,10 +41,35 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.playlistmaker.settings.presentation.fragment.SettingsFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingsFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
+    </fragment>
     <fragment
         android:id="@+id/musicPlayerFragment"
         android:name="com.example.playlistmaker.player.presentation.fragment.MusicPlayerFragment"
         android:label="fragment_music_player"
-        tools:layout="@layout/fragment_music_player" />
+        tools:layout="@layout/fragment_music_player">
+        <action
+            android:id="@+id/action_musicPlayerFragment_to_createPlayList"
+            app:destination="@id/createPlayList"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
+    </fragment>
+    <fragment
+        android:id="@+id/createPlayList"
+        android:name="com.example.playlistmaker.playlist_create.presentation.fragment.CreatePlayListFragment"
+        android:label="fragment_create_play_list"
+        tools:layout="@layout/fragment_create_playlist" />
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.example.playlistmaker.webview.presentation.fragment.WebViewFragment"
+        android:label="WebViewFragment" />
 </navigation>
