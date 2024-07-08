@@ -15,18 +15,6 @@
         tools:context=".about_playlist.presentation.fragment.AboutPlayListFragment">
 
         <ImageView
-            android:id="@+id/backIv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/o_16dp"
-            android:layout_marginTop="@dimen/o_16dp"
-            android:src="@drawable/back_ic"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/blackOrWhite"
-            tools:ignore="MissingConstraints" />
-
-        <ImageView
             android:id="@+id/ivImage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/o_0dp"
@@ -35,6 +23,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/backIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/o_16dp"
+            android:layout_marginTop="@dimen/o_16dp"
+            android:src="@drawable/back_ic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black"
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/tvNamePlaylist"
@@ -146,8 +146,59 @@
             android:id="@+id/recyclerViewBS"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/o_24dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="26dp" />
+
+        <FrameLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/flPlaceHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="@dimen/o_48dp"
+            android:foregroundGravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/com2_ic"
+                app:tint="@color/BlWh" />
+
+            <ImageView
+                android:id="@+id/ivSunOrWiFi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/o_28dp"
+                android:layout_marginTop="@dimen/o_26dp"
+                android:src="@drawable/sun_ic" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/o_72dp"
+                android:src="@drawable/com1_ic"
+                app:tint="@color/BlWh" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvPlaceHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/o_16dp"
+            android:fontFamily="@font/ys_display_medium"
+            android:gravity="center"
+            android:text="@string/no_track_in_playlist_message"
+            android:textColor="@color/whiteOrBlack"
+            android:textSize="@dimen/o_19sp"
+            app:layout_constraintTop_toBottomOf="@id/flPlaceHolder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

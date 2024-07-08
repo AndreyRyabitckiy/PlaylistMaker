@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.about_playlist.presentation.view_model.AboutPlayListFragmentViewModel
@@ -112,7 +113,16 @@ class AboutPlayListFragment : Fragment() {
         viewModel.aboutPlayListState.observe(viewLifecycleOwner) {
             binding.tvCountTrack.text = it.count
             binding.tvTimeTracks.text = it.time
-            adapter.data = it.tracks
+            if (it.tracks.isNotEmpty()) {
+                binding.recyclerViewBS.isVisible = true
+                binding.tvPlaceHolder.isVisible = false
+                binding.flPlaceHolder.isVisible = false
+                adapter.data = it.tracks
+            } else {
+                binding.recyclerViewBS.isVisible = false
+                binding.tvPlaceHolder.isVisible = true
+                binding.flPlaceHolder.isVisible = true
+            }
             binding.tvCountTrackBS.text = it.count
         }
 

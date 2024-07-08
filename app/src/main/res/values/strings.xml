@@ -49,4 +49,5 @@
     <string name="tracks_share_intent">Привет, посмотри на мой плэйлист с названием «%1$s».\nОписание: «%2$s».\nВ нем «%3$s трека».\nСписок треков:\n</string>
     <string name="edit_playlist">Редактировать</string>
     <string name="save_fragment_playlist">Сохранить</string>
+    <string name="no_track_in_playlist_message">Вы не добавили ни один трек \nв этот плейлист</string>
 </resources>

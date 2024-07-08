@@ -40,7 +40,9 @@ class PlayListInteractorImpl(private val playListRepository: PlayListRepository)
         playListRepository.getCountTracks(id)
 
     override fun tracksInPlayList(id: Long): Flow<List<Track>> {
-        return playListRepository.listTrackPlaylist(id)
+        return playListRepository.listTrackPlaylist(id).map {
+            it.reversed()
+        }
     }
 
     override suspend fun getTimesTracks(id: Long): String {

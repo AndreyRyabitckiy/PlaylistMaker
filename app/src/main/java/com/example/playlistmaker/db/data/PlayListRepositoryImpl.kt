@@ -115,7 +115,8 @@ class PlayListRepositoryImpl(
             playList.aboutPlayList,
             database.playListDao().getTracksCount(id).toString()
         )
-        database.playListDao().tracksInPlayList(id).forEachIndexed { index, playlistTrackEntity ->
+        val base = database.playListDao().tracksInPlayList(id).reversed()
+            base.forEachIndexed { index, playlistTrackEntity ->
             textMessage += "«${index + 1}. ${playlistTrackEntity.artistName} - ${playlistTrackEntity.trackName} (${playlistTrackEntity.trackTimeMillis})».\n"
         }
         return textMessage
