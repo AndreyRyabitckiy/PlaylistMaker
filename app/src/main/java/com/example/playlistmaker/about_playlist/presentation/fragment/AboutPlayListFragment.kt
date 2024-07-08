@@ -1,5 +1,6 @@
 package com.example.playlistmaker.about_playlist.presentation.fragment
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ class AboutPlayListFragment : Fragment() {
     private var _binding: FragmentAboutPlaylistBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AboutPlayListFragmentViewModel by viewModel()
+    private var imageUri: Uri? = null
     private val adapter by lazy { TrackAdapter() }
     private var debounceClick = true
     lateinit var confirmDialog: MaterialAlertDialogBuilder
@@ -56,7 +58,7 @@ class AboutPlayListFragment : Fragment() {
                         requireArguments().parcelable<PlayList>(PLAYLIST_ITEM)!!.id,
                         binding.tvNamePlaylist.text.toString(),
                         binding.tvAboutPlaylist.text.toString(),
-                        requireArguments().parcelable<PlayList>(PLAYLIST_ITEM)!!.roadToFileImage
+                        imageUri.toString()
                     )
                 )
             )
@@ -96,6 +98,7 @@ class AboutPlayListFragment : Fragment() {
                 tvNamePlaylistBS.text = playlist.namePlayList
                 tvNamePlaylist.text = playlist.namePlayList
                 tvAboutPlaylist.text = playlist.aboutPlayList
+                imageUri = playlist.roadToFileImage.toUri()
                 if (playlist.roadToFileImage.isNotEmpty()) {
                     ivImageBS.setImageURI(playlist.roadToFileImage.toUri())
                     ivImage.setImageURI(playlist.roadToFileImage.toUri())
@@ -159,6 +162,7 @@ class AboutPlayListFragment : Fragment() {
     private fun playlistItemUse() {
         binding.run {
             requireArguments().parcelable<PlayList>(PLAYLIST_ITEM)?.let { playlist ->
+                imageUri = playlist.roadToFileImage.toUri()
                 viewModel.update(playlist.id)
             }
         }
