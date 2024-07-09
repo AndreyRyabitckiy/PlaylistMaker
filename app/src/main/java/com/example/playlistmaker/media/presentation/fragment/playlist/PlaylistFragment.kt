@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
+import com.example.playlistmaker.about_playlist.presentation.fragment.AboutPlayListFragment
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.media.presentation.view_model.PlayListViewModel
 import com.example.playlistmaker.ui.root.RootActivity
@@ -50,7 +52,13 @@ class PlaylistFragment : Fragment() {
             }
         }
 
-
+        adapter.onClick = { playList ->
+            (activity as RootActivity).animateBottomNavigationViewFalse()
+            findNavController().navigate(
+                R.id.action_mediaLibraryFragment_to_aboutPlayListFragment,
+                bundleOf(PLAYLIST_ITEM to playList)
+            )
+        }
 
         binding.btNewPlaylist.setOnClickListener {
             (activity as RootActivity).animateBottomNavigationViewFalse()
@@ -61,7 +69,6 @@ class PlaylistFragment : Fragment() {
 
 
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -76,6 +83,7 @@ class PlaylistFragment : Fragment() {
 
     companion object {
         private const val PLAYLIST_NUMBER = "playlist_number"
+        private const val PLAYLIST_ITEM = "Playlist"
 
         fun newInstance() = PlaylistFragment().apply {
             arguments = Bundle().apply {

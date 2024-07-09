@@ -37,6 +37,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:foreground="?attr/selectableItemBackground"
         android:id="@+id/llShareApp"
         style="@style/LinearSettings"
         tools:ignore="UseCompoundDrawables">
@@ -54,6 +55,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:foreground="?attr/selectableItemBackground"
         android:id="@+id/llSendSupport"
         style="@style/LinearSettings"
         tools:ignore="UseCompoundDrawables">
@@ -72,6 +74,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:foreground="?attr/selectableItemBackground"
         android:id="@+id/llUserPolicy"
         style="@style/LinearSettings"
         tools:ignore="UseCompoundDrawables">

@@ -18,4 +18,6 @@
     <color name="red_like">#F56B6C</color>
     <color name="blue_enable">#3772E7</color>
     <color name="player_button">#c5c6c8</color>
+    <color name="playlist_main">#e6e8eb</color>
+    <color name="progres_bar">#3772E7</color>
 </resources>

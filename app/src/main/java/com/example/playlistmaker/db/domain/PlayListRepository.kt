@@ -13,4 +13,18 @@ interface PlayListRepository {
 
     suspend fun getCountTracks(id: Long): Int
 
+    fun listTrackPlaylist(id: Long): Flow<List<Track>>
+
+    suspend fun getTimesTracks(id: Long): String
+
+    suspend fun deleteTrack(id: Long)
+
+    suspend fun deletePlaylist(id: Long)
+
+    suspend fun shareTracks(id: Long)
+
+    suspend fun editPlayList(playList: PlayList)
+
+    suspend fun getPlayList(id: Long): PlayList
+
 }

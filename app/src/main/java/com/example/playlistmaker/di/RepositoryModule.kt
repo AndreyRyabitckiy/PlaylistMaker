@@ -50,7 +50,7 @@ val repositoryModule = module {
     factory { PlayListDbConvertor() }
 
     single<PlayListRepository> {
-        PlayListRepositoryImpl(get(), get())
+        PlayListRepositoryImpl(get(), get(), androidContext())
     }
 
 }
